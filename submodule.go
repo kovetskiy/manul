@@ -22,10 +22,10 @@ func getVendorSubmodules() (map[string]string, error) {
 			continue
 		}
 
-		parts := strings.Split(line, " ")
-		if len(parts) == 4 {
-			path := parts[2]
-			commit := parts[1]
+		parts := strings.Split(strings.TrimLeft(line, " -"), " ")
+		if len(parts) >= 2 {
+			path := parts[1]
+			commit := parts[0]
 			if strings.HasPrefix(path, "vendor/") {
 				path = strings.TrimPrefix(path, "vendor/")
 				vendors[path] = commit
