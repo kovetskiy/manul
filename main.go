@@ -18,7 +18,6 @@ Usage:
     manul -S | --sync
     manul -C | --clean
     manul -U | --update <dependency>...
-    manul -U | --update -a
     manul -Q | --query
     manul -h | --help
     manul -v | --version
