@@ -17,7 +17,7 @@ manul it is utility for vendoring dependencies using git submodule technology.
 Usage:
     manul -S
     manul -C
-    manul -U <dependency>...
+    manul -U [<dependency>...]
     manul -Q [-o]
     manul -h
     manul -v
