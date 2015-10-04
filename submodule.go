@@ -2,7 +2,9 @@ package main
 
 import (
 	"errors"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 )
 
@@ -77,11 +79,15 @@ func removeVendorSubmodule(importpath string) error {
 }
 
 func updateVendorSubmodule(importpath string) error {
-	path := "vendor/" + importpath
+	cwd, err := os.Getwd()
+	if err != nil {
+		return err
+	}
 
-	_, err := execute(
-		exec.Command("git", "--work-tree="+path, "pull", "origin", "master"),
-	)
+	cmd := exec.Command("git", "pull", "origin", "master")
+	cmd.Dir = filepath.Join(cwd, "vendor", importpath)
+
+	_, err = execute(cmd)
 
 	return err
 }

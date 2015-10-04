@@ -5,7 +5,7 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/docopt/docopt.go"
+	"github.com/docopt/docopt-go"
 )
 
 const (
@@ -15,12 +15,12 @@ const (
 manul it is utility for vendoring dependencies using git submodule technology.
 
 Usage:
-    manul -S | --sync
-    manul -C | --clean
-    manul -U | --update <dependency>...
-    manul -Q | --query
-    manul -h | --help
-    manul -v | --version
+    manul -S
+    manul -C
+    manul -U <dependency>...
+    manul -Q [-o]
+    manul -h
+    manul -v
 
 Options:
     -S --sync     Find all dependencies and add git submodule into vendor directory.
@@ -28,7 +28,8 @@ Options:
     -U --update   Update specified already-vendored dependencies.
                       If you don't specify any vendored dependency, manul will
                       update all already-vendored dependencies.
-    -Q --query    List all vendored dependencies.
+    -Q --query    List all dependencies.
+        -o        List only already-vendored dependencies.
     -h --help     Show help message.
     -v --version  Show version.
 `
@@ -47,39 +48,20 @@ func main() {
 		modeQuery  = args["--query"].(bool)
 	)
 
-	imports := []string{}
-	if modeSync || modeClean {
-		imports, err = parseImports()
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	submodules, err := getVendorSubmodules()
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	switch {
 	case modeSync:
-		err = handleSync(imports, submodules)
+		err = handleSync()
 
 	case modeClean:
-		err = handleClean(imports, submodules)
+		err = handleClean()
 
 	case modeUpdate:
 		imports, _ := args["<dependency>"].([]string)
-		if len(imports) == 0 {
-			imports, err = parseImports()
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
-
-		err = handleUpdate(submodules, imports)
+		err = handleUpdate(imports)
 
 	case modeQuery:
-		err = handleQuery(submodules)
+		onlyVendored := args["-o"].(bool)
+		err = handleQuery(onlyVendored)
 	}
 
 	if err != nil {
@@ -87,7 +69,17 @@ func main() {
 	}
 }
 
-func handleSync(imports []string, submodules map[string]string) error {
+func handleSync() error {
+	imports, err := parseImports()
+	if err != nil {
+		return err
+	}
+
+	submodules, err := getVendorSubmodules()
+	if err != nil {
+		return err
+	}
+
 	added := 0
 	for _, importpath := range imports {
 		found := false
@@ -121,7 +113,17 @@ func handleSync(imports []string, submodules map[string]string) error {
 	return nil
 }
 
-func handleClean(imports []string, submodules map[string]string) error {
+func handleClean() error {
+	imports, err := parseImports()
+	if err != nil {
+		return err
+	}
+
+	submodules, err := getVendorSubmodules()
+	if err != nil {
+		return err
+	}
+
 	removed := 0
 	for submodule, _ := range submodules {
 		found := false
@@ -155,7 +157,20 @@ func handleClean(imports []string, submodules map[string]string) error {
 	return nil
 }
 
-func handleUpdate(submodules map[string]string, imports []string) error {
+func handleUpdate(imports []string) error {
+	var err error
+	if len(imports) == 0 {
+		imports, err = parseImports()
+		if err != nil {
+			return err
+		}
+	}
+
+	submodules, err := getVendorSubmodules()
+	if err != nil {
+		return err
+	}
+
 	updated := 0
 	for _, importpath := range imports {
 		if _, ok := submodules[importpath]; !ok {
@@ -180,19 +195,43 @@ func handleUpdate(submodules map[string]string, imports []string) error {
 	return nil
 }
 
-func handleQuery(submodules map[string]string) error {
-	maxlength := 0
-	for submodule, _ := range submodules {
-		length := len(submodule)
-		if length > maxlength {
-			maxlength = length
-		}
+func handleQuery(onlyVendored bool) error {
+	submodules, err := getVendorSubmodules()
+	if err != nil {
+		return err
 	}
 
-	format := "%-" + strconv.Itoa(maxlength) + "s %s\n"
+	if onlyVendored {
+		maxlength := getMaxLength(getKeys(submodules))
+		format := "%-" + strconv.Itoa(maxlength) + "s %s\n"
 
-	for submodule, commit := range submodules {
-		fmt.Printf(format, submodule, commit)
+		for submodule, commit := range submodules {
+			fmt.Printf(format, submodule, commit)
+		}
+	} else {
+		imports, err := parseImports()
+		if err != nil {
+			return err
+		}
+
+		maxlength := 0
+		if len(submodules) > 0 {
+			maxlength = getMaxLength(
+				append(getKeys(submodules), imports...),
+			)
+		}
+
+		vendoredFormat := "%-" + strconv.Itoa(maxlength) + "s  %s\n"
+
+		for _, importpath := range imports {
+			commit, vendored := submodules[importpath]
+			if vendored {
+				fmt.Printf(vendoredFormat, importpath, commit)
+			} else {
+				fmt.Println(importpath)
+			}
+		}
+
 	}
 
 	return nil
