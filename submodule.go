@@ -41,7 +41,7 @@ func getVendorSubmodules() (map[string]string, error) {
 func addVendorSubmodule(importpath string) error {
 	var (
 		target   = "vendor/" + importpath
-		prefixes = []string{"git://", "git+ssh://", "ssh://", "https://"}
+		prefixes = []string{"https://", "git://", "git+ssh://"}
 
 		errs []string
 	)
