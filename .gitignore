@@ -1,0 +1,5 @@
+*.deb
+src/
+pkg/
+bin/
+manul-deb/usr/bin/manul

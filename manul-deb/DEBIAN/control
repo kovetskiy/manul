@@ -1,0 +1,8 @@
+Package: manul
+Version: 8.3dd55bc
+Architecture: amd64
+Section: unknown
+Priority: extra
+Maintainer: Egor Kovetskiy <e.kovetskiy@gmail.com>
+Homepage: https://github.com/kovetskiy/manul
+Description: dependencies vendoring utility
