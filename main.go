@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"strings"
 
 	"github.com/docopt/docopt-go"
 )
@@ -102,7 +103,8 @@ func handleInstall(dependencies []string) error {
 		if !installAll {
 			found := false
 			for _, importpath := range imports {
-				if importpath == dependency {
+				// there is HasPrefix for handling subpackages
+				if strings.HasPrefix(importpath, dependency) {
 					found = true
 					break
 				}
