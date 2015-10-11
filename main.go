@@ -12,7 +12,7 @@ const (
 	version = `manul 1.0`
 	usage   = version + `
 
-manul it is utility for vendoring dependencies using git submodule technology.
+manul is the tool for vendoring dependencies using git submodule technology.
 
 Usage:
     manul -S
@@ -23,13 +23,14 @@ Usage:
     manul -v
 
 Options:
-    -S --sync     Find all dependencies and add git submodule into vendor directory.
+    -S --sync     Find all dependencies and add git submodule into the vendor
+	              directory.
     -C --clean    Find all unused vendor submodules and remove it.
-    -U --update   Update specified already-vendored dependencies.
+    -U --update   Update specified already vendored dependencies.
                       If you don't specify any vendored dependency, manul will
-                      update all already-vendored dependencies.
+                      update all already vendored dependencies.
     -Q --query    List all dependencies.
-        -o        List only already-vendored dependencies.
+        -o        List only already vendored dependencies.
     -h --help     Show help message.
     -v --version  Show version.
 `
