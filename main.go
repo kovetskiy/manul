@@ -13,7 +13,7 @@ const (
 	version = `manul 1.0`
 	usage   = version + `
 
-manul it is utility for vendoring dependencies using git submodule technology.
+manul is the tool for vendoring dependencies using git submodule technology.
 
 Usage:
     manul -I [<dependency>...]
