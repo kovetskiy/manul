@@ -46,9 +46,7 @@ Pros:
 
 - Rollback changes in dependencies.
 
-- *Almost go-gettable*, [Go by itself have a little trouble with
-    submodules](https://github.com/golang/go/issues/12573) right now; but
-    there are trivial workaround, which will be discussed later.
+- *completely go-gettable*
 
 **git submodule** might looks like **Silver Bullet**, but it's still clumsy to
 work with manually. We want to have a powerful yet simple interface for
