@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"go/build"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -90,4 +91,24 @@ func updateVendorSubmodule(importpath string) error {
 	_, err = execute(cmd)
 
 	return err
+}
+
+func getRootImportpath(importpath string) (string, error) {
+	pkg, err := build.Import(importpath, "", build.IgnoreVendor)
+	if err != nil {
+		return "", err
+	}
+
+	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
+	cmd.Dir = filepath.Join(pkg.SrcRoot, importpath)
+
+	rootdir, err := execute(cmd)
+	if err != nil {
+		return "", err
+	}
+
+	return strings.Trim(
+		strings.TrimSpace(strings.TrimPrefix(rootdir, pkg.SrcRoot)),
+		"/",
+	), nil
 }

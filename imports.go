@@ -3,6 +3,7 @@ package main
 import (
 	"go/build"
 	"os"
+	"sort"
 )
 
 func recursiveParseImports(
@@ -47,18 +48,40 @@ func parseImports() ([]string, error) {
 		return nil, err
 	}
 
-	imports := map[string]bool{}
-	err = recursiveParseImports(imports, ".", cwd)
+	var (
+		allImports = map[string]bool{}
+		imports    = []string{}
+	)
+
+	err = recursiveParseImports(allImports, ".", cwd)
 	if err != nil {
 		return nil, err
 	}
 
-	notstandard := []string{}
-	for pkg, standard := range imports {
+	for importing, standard := range allImports {
 		if !standard {
-			notstandard = append(notstandard, pkg)
+			importpath, err := getRootImportpath(importing)
+			if err != nil {
+				continue
+			}
+
+			found := false
+			for _, imported := range imports {
+				if importpath == imported {
+					found = true
+					break
+				}
+			}
+
+			if found {
+				continue
+			}
+
+			imports = append(imports, importpath)
 		}
 	}
 
-	return notstandard, nil
+	sort.Strings(imports)
+
+	return imports, nil
 }
