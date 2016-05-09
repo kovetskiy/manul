@@ -3,7 +3,6 @@ package main
 import (
 	"go/build"
 	"os"
-	"strings"
 )
 
 func recursiveParseImports(
@@ -13,7 +12,7 @@ func recursiveParseImports(
 		return nil
 	}
 
-	pkg, err := build.Import(path, cwd, 0)
+	pkg, err := build.Import(path, cwd, build.IgnoreVendor)
 	if err != nil {
 		return err
 	}
@@ -22,9 +21,7 @@ func recursiveParseImports(
 		standard := false
 
 		// this condition copied from cmd/go/pkg.go
-		if pkg.Goroot &&
-			pkg.ImportPath != "" &&
-			!strings.Contains(pkg.ImportPath, ".") {
+		if pkg.Goroot && pkg.ImportPath != "" {
 			standard = true
 		}
 
