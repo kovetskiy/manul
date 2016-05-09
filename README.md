@@ -10,21 +10,21 @@ Because all other vendor utilities sucks by following reasons:
 
 - Some wraps `go` binary and spoof `GOPATH` env variable.
     You will have non-go-gettable project and additional software is required
-    in order to *compile and run* project.
+    in order to *compile and run* project;
 
 - Some copy source code of dependencies into the vendor directory:
     * It will be nearly impossible to find anything ussing GitHub Search,
-        because you will get many false-positive results.
+        because you will get many false-positive results;
     * Updating dependencies will require manual intervention and commiting
-        a lot of modified lines straight into the main repo.
+        a lot of modified lines straight into the main repo;
     * You will not be able to tell what version of dependency your project is
         using will by looking at repository; you have to keep versions in the
         additional ambigious file with vendors associated with commits.
 
 - Various architecture problems:
-    * Impossible to update all or specific vendored dependencies.
-    * Impossible to rollback vendored dependencies to specific version.
-    * Impossible to remove unused vendored dependencies.
+    * Impossible to update all or specific vendored dependencies;
+    * Impossible to rollback vendored dependencies to specific version;
+    * Impossible to remove unused vendored dependencies;
     * Impossible to lock version of vendored dependency.
 
 ## Solution
@@ -38,15 +38,15 @@ They can be managed in the same way as main project by `git`.
 
 Pros:
 
-- No need for additional software for building/running your Golang project.
+- No need for additional software for building/running your Golang project;
 
-- No need for additional json/toml/yaml file for storing dependencies.
+- No need for additional json/toml/yaml file for storing dependencies;
 
-- Update vendored dependencies directly from remote origins.
+- Update vendored dependencies directly from remote origins;
 
-- Rollback changes in dependencies.
+- Rollback changes in dependencies;
 
-- *completely go-gettable*
+- Go-gettable
 
 **git submodule** might looks like **Silver Bullet**, but it's still clumsy to
 work with manually. We want to have a powerful yet simple interface for
