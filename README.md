@@ -2,7 +2,7 @@
 
 ![madness](https://cloud.githubusercontent.com/assets/8445924/10410421/ccca8b24-6f30-11e5-9952-9e5be5c4d792.png)
 
-Manul is the dependency vendoring utility for Golang programs.
+Manul is the vendoring utility for Golang programs.
 
 ## What the reason for yet another utility?
 
