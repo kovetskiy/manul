@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"go/build"
 	"os"
 	"os/exec"
@@ -42,7 +43,11 @@ func getVendorSubmodules() (map[string]string, error) {
 func addVendorSubmodule(importpath string) error {
 	var (
 		target   = "vendor/" + importpath
-		prefixes = []string{"https://", "git://", "git+ssh://"}
+		prefixes = []string{
+			"git://",
+			"https://",
+			"git+ssh://",
+		}
 
 		errs []string
 	)
@@ -64,16 +69,33 @@ func addVendorSubmodule(importpath string) error {
 }
 
 func removeVendorSubmodule(importpath string) error {
-	path := "vendor/" + importpath
+	vendor := "vendor/" + importpath
 
-	_, err := execute(exec.Command("git", "submodule", "deinit", "-f", path))
+	_, err := execute(
+		exec.Command("git", "submodule", "deinit", "-f", vendor),
+	)
 	if err != nil {
-		return err
+		return fmt.Errorf(
+			"can't deinit submodule: %s", err,
+		)
 	}
 
-	_, err = execute(exec.Command("git", "rm", "-r", "-f", path))
+	_, err = execute(
+		exec.Command("git", "rm", vendor),
+	)
 	if err != nil {
-		return err
+		return fmt.Errorf(
+			"can't remove submodule directory: %s", err,
+		)
+	}
+
+	_, err = execute(
+		exec.Command("rm", "-r", filepath.Join(".git", "modules", vendor)),
+	)
+	if err != nil {
+		return fmt.Errorf(
+			"can't remove submodule directory in .git/modules: %s", err,
+		)
 	}
 
 	return nil
