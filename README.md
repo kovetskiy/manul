@@ -111,27 +111,6 @@ Let's summarize:
 
 You can see similar help message by passing `-h` or `--help` flag.
 
-## What does “almost go-gettable” mean?
-
-This means, that until [that issue in
-golang/go](https://github.com/golang/go/issues/12612) is not solved yet, you
-will not be able to use `go get` with your project.
-
-But, it's not the big deal, because manul is only required for embedding
-dependencies, not for building or running the program. End user of your
-project should not install `manul` for compilation from source code.
-
-For now projects, which uses the git submodules for vendoring dependencies, can
-be built by running this pretty easy commands:
-```bash
-git clone --recursive <git-repository> $GOPATH/src/<project-name>
-cd $GOPATH/src/<project-name>
-go install
-```
-
-Although, I think it's bad practice when maintainers don't create packages
-for most popular distribs.
-
 ## Installation
 
 #### Ubuntu/Debian:
