@@ -4,6 +4,7 @@ import (
 	"go/build"
 	"os"
 	"sort"
+	"strings"
 )
 
 func recursiveParseImports(
@@ -21,8 +22,8 @@ func recursiveParseImports(
 	if path != "." {
 		standard := false
 
-		// this condition copied from cmd/go/pkg.go
-		if pkg.Goroot && pkg.ImportPath != "" {
+		if strings.HasPrefix(pkg.ImportPath, "golang.org/") ||
+			(pkg.Goroot && pkg.ImportPath != "") {
 			standard = true
 		}
 
