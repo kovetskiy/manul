@@ -81,7 +81,7 @@ func removeVendorSubmodule(importpath string) error {
 	}
 
 	_, err = execute(
-		exec.Command("git", "rm", vendor),
+		exec.Command("git", "rm", "--force", vendor),
 	)
 	if err != nil {
 		return fmt.Errorf(
