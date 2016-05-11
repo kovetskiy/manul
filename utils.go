@@ -1,12 +1,21 @@
 package main
 
 import (
+	"log"
 	"os/exec"
 
 	"github.com/kovetskiy/executil"
 )
 
 func execute(cmd *exec.Cmd) (string, error) {
+	if verbose {
+		if cmd.Dir != "" {
+			log.Printf("exec %q in %s", cmd.Args, cmd.Dir)
+		} else {
+			log.Printf("exec %q", cmd.Args)
+		}
+	}
+
 	stdout, _, err := executil.Run(cmd)
 	return string(stdout), err
 }

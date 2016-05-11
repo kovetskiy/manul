@@ -10,36 +10,41 @@ import (
 )
 
 const (
-	version = `manul 1.0`
+	version = `manul 1.3`
 	usage   = version + `
 
 manul is the tool for vendoring dependencies using git submodule technology.
 
 Usage:
-    manul -I [<dependency>...]
-    manul -U [<dependency>...]
-    manul -R [<dependency>...]
-    manul -Q [-o]
-    manul -C
+    manul [-v] -I [<dependency>...]
+    manul [-v] -U [<dependency>...]
+    manul [-v] -R [<dependency>...]
+    manul [-v] -Q [-o]
+    manul [-v] -C
     manul -h
-    manul -v
+    manul --version
 
 Options:
     -I --install  Detect all dependencies and add git submodule into vendor directory.
-                      If you don't specify any dependency, manul will
-                      install all detected dependencies.
+                   If you don't specify any dependency, manul will
+                   install all detected dependencies.
     -U --update   Update specified already-vendored dependencies.
-                      If you don't specify any vendored dependency, manul will
-                      update all already-vendored dependencies.
+                   If you don't specify any vendored dependency, manul will
+                   update all already-vendored dependencies.
     -R --remove   Stop vendoring of specified dependencies.
-                      If you don't specify any dependency, manul will
-                      remove all vendored dependencies.
+                   If you don't specify any dependency, manul will
+                   remove all vendored dependencies.
     -Q --query    List all dependencies.
         -o        List only already-vendored dependencies.
     -C --clean    Detect all unused vendored dependencies and remove it.
     -h --help     Show help message.
-    -v --version  Show version.
+    -v            Be verbose.
+    --version     Show version.
 `
+)
+
+var (
+	verbose bool
 )
 
 func main() {
@@ -57,6 +62,8 @@ func main() {
 
 		dependencies, _ = args["<dependency>"].([]string)
 	)
+
+	verbose = args["-v"].(bool)
 
 	switch {
 	case modeInstall:
