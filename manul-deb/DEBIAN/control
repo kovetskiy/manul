@@ -1,5 +1,5 @@
 Package: manul
-Version: 8.3dd55bc
+Version: $VERSION$
 Architecture: amd64
 Section: unknown
 Priority: extra
