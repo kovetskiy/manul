@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/docopt/docopt-go"
+	"github.com/kovetskiy/godocs"
 )
 
 const (
@@ -16,30 +16,31 @@ const (
 manul is the tool for vendoring dependencies using git submodule technology.
 
 Usage:
-    manul [-v] -I [<dependency>...]
-    manul [-v] -U [<dependency>...]
-    manul [-v] -R [<dependency>...]
-    manul [-v] -Q [-o]
-    manul [-v] -C
+    manul [options] -I [<dependency>...]
+    manul [options] -U [<dependency>...]
+    manul [options] -R [<dependency>...]
+    manul [options] -Q [-o]
+    manul [options] -C
     manul -h
     manul --version
 
 Options:
-    -I --install  Detect all dependencies and add git submodule into vendor directory.
-                   If you don't specify any dependency, manul will
-                   install all detected dependencies.
-    -U --update   Update specified already-vendored dependencies.
-                   If you don't specify any vendored dependency, manul will
-                   update all already-vendored dependencies.
-    -R --remove   Stop vendoring of specified dependencies.
-                   If you don't specify any dependency, manul will
-                   remove all vendored dependencies.
-    -Q --query    List all dependencies.
-        -o        List only already-vendored dependencies.
-    -C --clean    Detect all unused vendored dependencies and remove it.
-    -h --help     Show help message.
-    -v            Be verbose.
-    --version     Show version.
+    -I --install    Detect all dependencies and add git submodule into vendor directory.
+                     If you don't specify any dependency, manul will
+                     install all detected dependencies.
+    -U --update     Update specified already-vendored dependencies.
+                     If you don't specify any vendored dependency, manul will
+                     update all already-vendored dependencies.
+    -R --remove     Stop vendoring of specified dependencies.
+                     If you don't specify any dependency, manul will
+                     remove all vendored dependencies.
+    -Q --query      List all dependencies.
+        -o          List only already-vendored dependencies.
+    -C --clean      Detect all unused vendored dependencies and remove it.
+    -r --recursive  Be recursive.
+    -h --help       Show help message.
+    -v --verbose    Be verbose.
+    --version       Show version.
 `
 )
 
@@ -48,10 +49,7 @@ var (
 )
 
 func main() {
-	args, err := docopt.Parse(usage, nil, true, version, true, true)
-	if err != nil {
-		panic(err)
-	}
+	args := godocs.MustParse(usage, version)
 
 	var (
 		modeInstall = args["--install"].(bool)
@@ -61,27 +59,29 @@ func main() {
 		modeClean   = args["--clean"].(bool)
 
 		dependencies, _ = args["<dependency>"].([]string)
+
+		recursive = args["--recursive"].(bool)
 	)
 
-	verbose = args["-v"].(bool)
+	verbose = args["--verbose"].(bool)
 
+	var err error
 	switch {
 	case modeInstall:
-		err = handleInstall(dependencies)
+		err = handleInstall(recursive, dependencies)
 
 	case modeUpdate:
-		err = handleUpdate(dependencies)
+		err = handleUpdate(recursive, dependencies)
 
 	case modeQuery:
 		onlyVendored := args["-o"].(bool)
-		err = handleQuery(onlyVendored)
+		err = handleQuery(recursive, onlyVendored)
 
 	case modeRemove:
 		err = handleRemove(dependencies)
 
 	case modeClean:
-		err = handleClean()
-
+		err = handleClean(recursive)
 	}
 
 	if err != nil {
@@ -89,8 +89,8 @@ func main() {
 	}
 }
 
-func handleInstall(dependencies []string) error {
-	imports, err := parseImports()
+func handleInstall(recursive bool, dependencies []string) error {
+	imports, err := parseImports(recursive)
 	if err != nil {
 		return err
 	}
@@ -154,10 +154,10 @@ func handleInstall(dependencies []string) error {
 	return nil
 }
 
-func handleUpdate(dependencies []string) error {
+func handleUpdate(recursive bool, dependencies []string) error {
 	var err error
 	if len(dependencies) == 0 {
-		dependencies, err = parseImports()
+		dependencies, err = parseImports(recursive)
 		if err != nil {
 			return err
 		}
@@ -221,7 +221,7 @@ func handleRemove(dependencies []string) error {
 	return nil
 }
 
-func handleQuery(onlyVendored bool) error {
+func handleQuery(recursive, onlyVendored bool) error {
 	submodules, err := getVendorSubmodules()
 	if err != nil {
 		return err
@@ -235,7 +235,7 @@ func handleQuery(onlyVendored bool) error {
 			fmt.Printf(format, submodule, commit)
 		}
 	} else {
-		imports, err := parseImports()
+		imports, err := parseImports(recursive)
 		if err != nil {
 			return err
 		}
@@ -263,8 +263,8 @@ func handleQuery(onlyVendored bool) error {
 	return nil
 }
 
-func handleClean() error {
-	imports, err := parseImports()
+func handleClean(recursive bool) error {
+	imports, err := parseImports(recursive)
 	if err != nil {
 		return err
 	}

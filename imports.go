@@ -2,7 +2,9 @@ package main
 
 import (
 	"go/build"
+	"log"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 )
@@ -43,7 +45,7 @@ func recursiveParseImports(
 	return nil
 }
 
-func parseImports() ([]string, error) {
+func parseImports(recursive bool) ([]string, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
 		return nil, err
@@ -54,10 +56,41 @@ func parseImports() ([]string, error) {
 		imports    = []string{}
 	)
 
-	err = recursiveParseImports(allImports, ".", cwd)
-	if err != nil {
-		return nil, err
-	}
+	filepath.Walk(
+		cwd, func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+
+			if filepath.Base(path) == ".git" ||
+				filepath.Dir(path) == filepath.Join(cwd, "vendor") {
+				return filepath.SkipDir
+			}
+
+			if path == filepath.Join(cwd, "vendor") {
+				return nil
+			}
+
+			if !info.IsDir() {
+				return nil
+			}
+
+			err = recursiveParseImports(
+				allImports,
+				".",
+				path,
+			)
+			if _, ok := err.(*build.NoGoError); ok {
+				return nil
+			}
+
+			if err != nil {
+				log.Println(err)
+			}
+
+			return nil
+		},
+	)
 
 	for importing, standard := range allImports {
 		if !standard {
