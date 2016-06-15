@@ -24,8 +24,8 @@ GO
 :lib "github.com/kovetskiy/manul-test-bar"
 
 
-tests:ensure :manul -Q --recursive \| sort -n
+tests:ensure :manul -Q --recursive
 tests:assert-no-diff stdout <<VENDORS
-github.com/kovetskiy/manul-test-foo
 github.com/kovetskiy/manul-test-bar
+github.com/kovetskiy/manul-test-foo
 VENDORS

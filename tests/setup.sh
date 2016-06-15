@@ -12,9 +12,9 @@ tests:make-tmp-dir go go/pkg go/src go/src/project
     local filename="$1"
     local _dir=$(dirname "$filename")
     tests:make-tmp-dir "go/src/project/$_dir"
-    tests:put "go/src/project/$_dir/$filename"
+    tests:put "go/src/project/$filename"
 
-    tests:cd-tmp-dir "go/src/project/$_dir"
+    tests:cd-tmp-dir "go/src/project/"
     tests:ensure git init
 }
 
