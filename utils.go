@@ -34,7 +34,7 @@ func getMaxLength(elements []string) int {
 
 func getKeys(items map[string]string) []string {
 	keys := []string{}
-	for key, _ := range items {
+	for key := range items {
 		keys = append(keys, key)
 	}
 

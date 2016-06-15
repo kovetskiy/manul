@@ -123,7 +123,7 @@ func handleInstall(recursive bool, dependencies []string) error {
 		}
 
 		vendored := false
-		for submodule, _ := range submodules {
+		for submodule := range submodules {
 			if dependency == submodule {
 				vendored = true
 				break
@@ -275,7 +275,7 @@ func handleClean(recursive bool) error {
 	}
 
 	removed := 0
-	for submodule, _ := range submodules {
+	for submodule := range submodules {
 		found := false
 		for _, importpath := range imports {
 			if importpath == submodule {
