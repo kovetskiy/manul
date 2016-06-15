@@ -1,4 +1,4 @@
-# MANUL [![Go Report Card](https://goreportcard.com/badge/github.com/kovetskiy/manul)](https://goreportcard.com/report/github.com/kovetskiy/manul) ![travis](https://travis-ci.org/kovetskiy/manul.svg?branch=master)
+# MANUL [![Go Report Card](https://goreportcard.com/badge/github.com/kovetskiy/manul)](https://goreportcard.com/report/github.com/kovetskiy/manul) [![Build Status](https://travis-ci.org/kovetskiy/manul.svg?branch=master)](https://travis-ci.org/kovetskiy/manul)
 
 ![madness](https://cloud.githubusercontent.com/assets/8445924/10410421/ccca8b24-6f30-11e5-9952-9e5be5c4d792.png)
 
