@@ -99,6 +99,10 @@ func parseImports(recursive bool) ([]string, error) {
 				continue
 			}
 
+			if isOwnPackage(importpath, cwd) {
+				continue
+			}
+
 			found := false
 			for _, imported := range imports {
 				if importpath == imported {
@@ -118,4 +122,13 @@ func parseImports(recursive bool) ([]string, error) {
 	sort.Strings(imports)
 
 	return imports, nil
+}
+
+func isOwnPackage(path, cwd string) bool {
+	for _, gopath := range filepath.SplitList(os.Getenv("GOPATH")) {
+		if strings.HasPrefix(filepath.Join(gopath, "src", path), cwd) {
+			return true
+		}
+	}
+	return false
 }
