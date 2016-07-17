@@ -44,9 +44,9 @@ func addVendorSubmodule(importpath string) error {
 	var (
 		target   = "vendor/" + importpath
 		prefixes = []string{
-			"git://",
 			"https://",
 			"git+ssh://",
+			"git://",
 		}
 
 		errs []string
