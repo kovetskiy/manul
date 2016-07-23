@@ -8,6 +8,8 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 func getVendorSubmodules() (map[string]string, error) {
@@ -53,7 +55,17 @@ func addVendorSubmodule(importpath string) error {
 	)
 
 	for _, prefix := range prefixes {
-		url := prefix + importpath
+		var url string
+		if prefix == "https://" {
+			var err error
+			url, err = getHttpsURLForImportPath(importpath)
+			if err != nil {
+				errs = append(errs, err.Error())
+				continue
+			}
+		} else {
+			url = prefix + importpath
+		}
 
 		_, err := execute(
 			exec.Command("git", "submodule", "add", "-f", url, target),
@@ -66,6 +78,55 @@ func addVendorSubmodule(importpath string) error {
 	}
 
 	return errors.New(strings.Join(errs, "\n"))
+}
+
+// NOTE: This list is copied from
+// https://github.com/golang/go/blob/10538a8f9e2e718a47633ac5a6e90415a2c3f5f1/src/cmd/go/vcs.go#L821-L861
+var wellKnownSites = []string{
+	"github.com/",
+	"bitbucket.org/",
+	"hub.jazz.net/git/",
+	"git.apache.org/",
+	"git.openstack.org/",
+}
+
+func getHttpsURLForImportPath(importpath string) (url string, err error) {
+	url = "https://" + importpath
+	for _, site := range wellKnownSites {
+		if strings.HasPrefix(importpath, site) {
+			return
+		}
+	}
+
+	// NOTE: Parse <meta name="go-import" content="import-prefix vcs repo-root">
+	// For detail, see the output of "go help importpath"
+	var doc *goquery.Document
+	doc, err = goquery.NewDocument(url)
+	if err != nil {
+		return
+	}
+	doc.Find("meta[name=go-import]").Each(func(i int, s *goquery.Selection) {
+		if err != nil {
+			return
+		}
+		content, exists := s.Attr("content")
+		if !exists {
+			err = fmt.Errorf(`"content" attribute not found in meta name="go-import" at %s`, url)
+			return
+		}
+		terms := strings.Fields(content)
+		if len(terms) != 3 {
+			err = fmt.Errorf(`invalid formatted "content" attribute in meta name="go-import" at %s`, url)
+			return
+		}
+		prefix := terms[0]
+		vcs := terms[1]
+		repoRoot := terms[2]
+		if strings.HasPrefix(importpath, prefix) && vcs == "git" {
+			url = repoRoot
+		}
+	})
+	return
 }
 
 func removeVendorSubmodule(importpath string) error {
