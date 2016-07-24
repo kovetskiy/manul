@@ -94,7 +94,7 @@ func getHttpsURLForImportPath(importpath string) (url string, err error) {
 	url = "https://" + importpath
 	for _, site := range wellKnownSites {
 		if strings.HasPrefix(importpath, site) {
-			return
+			return url, nil
 		}
 	}
 
@@ -126,7 +126,10 @@ func getHttpsURLForImportPath(importpath string) (url string, err error) {
 			url = repoRoot
 		}
 	})
-	return
+	if err != nil {
+		return "", err
+	}
+	return url, nil
 }
 
 func removeVendorSubmodule(importpath string) error {
