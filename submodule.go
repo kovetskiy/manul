@@ -105,11 +105,11 @@ func getHttpsURLForImportPath(importpath string) (url string, err error) {
 	if err != nil {
 		return
 	}
-	doc.Find("meta[name=go-import]").Each(func(i int, s *goquery.Selection) {
+	doc.Find("meta[name=go-import]").Each(func(_ int, selection *goquery.Selection) {
 		if err != nil {
 			return
 		}
-		content, exists := s.Attr("content")
+		content, exists := selection.Attr("content")
 		if !exists {
 			err = fmt.Errorf(`"content" attribute not found in meta name="go-import" at %s`, url)
 			return
