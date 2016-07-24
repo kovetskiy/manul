@@ -12,6 +12,16 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+// NOTE: This list is copied from
+// https://github.com/golang/go/blob/10538a8f9e2e718a47633ac5a6e90415a2c3f5f1/src/cmd/go/vcs.go#L821-L861
+var wellKnownSites = []string{
+	"github.com/",
+	"bitbucket.org/",
+	"hub.jazz.net/git/",
+	"git.apache.org/",
+	"git.openstack.org/",
+}
+
 func getVendorSubmodules() (map[string]string, error) {
 	output, err := execute(
 		exec.Command("git", "submodule", "status"),
@@ -78,16 +88,6 @@ func addVendorSubmodule(importpath string) error {
 	}
 
 	return errors.New(strings.Join(errs, "\n"))
-}
-
-// NOTE: This list is copied from
-// https://github.com/golang/go/blob/10538a8f9e2e718a47633ac5a6e90415a2c3f5f1/src/cmd/go/vcs.go#L821-L861
-var wellKnownSites = []string{
-	"github.com/",
-	"bitbucket.org/",
-	"hub.jazz.net/git/",
-	"git.apache.org/",
-	"git.openstack.org/",
 }
 
 func getHttpsURLForImportPath(importpath string) (url string, err error) {
