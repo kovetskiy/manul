@@ -1,8 +1,8 @@
-# MANUL [![Go Report Card](https://goreportcard.com/badge/github.com/kovetskiy/manul)](https://goreportcard.com/report/github.com/kovetskiy/manul) [![Build Status](https://travis-ci.org/kovetskiy/manul.svg?branch=master)](https://travis-ci.org/kovetskiy/manul)
+# MANUL [![Build Status](https://travis-ci.org/kovetskiy/manul.svg?branch=master)](https://travis-ci.org/kovetskiy/manul) [![License](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](https://raw.githubusercontent.com/kovetskiy/manul/master/LICENSE) [![Go Report Card](https://goreportcard.com/badge/github.com/kovetskiy/manul)](https://goreportcard.com/report/github.com/kovetskiy/manul)
 
 ![madness](https://cloud.githubusercontent.com/assets/8445924/10410421/ccca8b24-6f30-11e5-9952-9e5be5c4d792.png)
 
-Manul is a vendoring utility for Golang programs.
+Manul is a vendoring utility for Go programs.
 
 ## What's the reason for yet another utility?
 
@@ -15,11 +15,11 @@ Because all other vendor utilities suffer from the following:
 - Some copy the source code of dependencies into the vendor directory:
     * It will be nearly impossible to find anything using GitHub Search,
         because you will get many false-positive results;
-    * Updating dependencies will require manual intervention and commiting
+    * Updating dependencies will require manual intervention and committing
         a lot of modified lines straight into the main repo;
     * You will not be able to tell what version of dependency your project is
         using will by looking at repository; you have to keep versions in the
-        additional ambigious file with vendors associated with commits.
+        additional ambiguous file with vendors associated with commits.
 
 - Various architecture problems:
     * Impossible to update all or specific vendored dependencies;
@@ -38,9 +38,9 @@ They can be managed in the same way as main project by `git`.
 
 Pros:
 
-- No need for additional software for building/running your Golang project;
+- No need for additional software for building/running your Go project;
 
-- No need for additional json/toml/yaml file for storing dependencies;
+- No need for additional JSON/TOML/YAML file for storing dependencies;
 
 - Update vendored dependencies directly from remote origins;
 
@@ -56,7 +56,7 @@ vendoring dependencies using this technology.
 
 ## Usage
 
-### Who needs a documentation, when there are the gifs?
+### Who needs a documentation when there are GIFs?
 
 First of all, we should request dependencies which we have in our project.
 To do this, just run manul with `-Q` (query) flag. It will output all the
@@ -124,15 +124,15 @@ dpkg -i *.deb
 
 #### Arch Linux:
 
+Install [manul](https://aur.archlinux.org/packages/manul) from AUR, or build the package manually:
+
+
 ```bash
 git clone --branch pkg-archlinux git://github.com/kovetskiy/manul /tmp/manul
 cd /tmp/manul
 makepkg
 pacman -U *.xz
 ```
-
-Also a package for Arch Linux available in the AUR:
-https://aur4.archlinux.org/packages/manul
 
 #### Other distros
 
