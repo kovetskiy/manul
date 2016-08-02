@@ -1,18 +1,46 @@
+_process=""
+
 :project "main.go" <<GO
 package main
 
-import foo "manul-test-foo.appspot.com/a/b"
+import foo "__blankd__/kovetskiy/manul-test-foo"
 
 func main() {
-    foo.Foo()
+    bar.A()
 }
 GO
 
-# NOTE: See https://github.com/hnakamur/google-app-engine-manul-test-foo
-# for source code of application manul-test-foo
-:lib "manul-test-foo.appspot.com/a/b"
+tests:put server <<SRV
+#!/bin/bash
 
-tests:ensure :manul -Q
+cat <<HTTP
+200 OK
+
+<meta name="go-import" content="localhost:60001/kovetskiy/manul-test-foo git https://github.com/kovetskiy/manul-test-foo" />
+HTTP
+SRV
+tests:ensure chmod +x $(tests:get-tmp-dir)/server
+
+
+:lib "github.com/kovetskiy/manul-test-foo"
+tests:ensure  mv \
+    $(tests:get-tmp-dir)/go/src/github.com \
+    $(tests:get-tmp-dir)/go/src/__blankd__
+
+tests:ensure blankd \
+    -l localhost:60001 \
+    -e $(tests:get-tmp-dir)/server \
+    -o $(tests:get-tmp-dir)/blankd.log \
+    --tls
+tests:value _process cat $(tests:get-stdout-file)
+:stop_blankd() {
+    if [[ "$_process" ]]; then
+        tests:eval kill "$_process"
+    fi
+}
+trap :stop_blankd EXIT
+
+tests:ensure :manul --integration-test --insecure-skip-verify -Q
 tests:assert-no-diff stdout <<VENDORS
-manul-test-foo.appspot.com/a/b
+localhost:60001/kovetskiy/manul-test-foo
 VENDORS
