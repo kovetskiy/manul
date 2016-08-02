@@ -53,19 +53,21 @@ var (
 )
 
 func init() {
-	for i, arg := range os.Args {
+	newArgs := make([]string, 0, len(os.Args))
+	for _, arg := range os.Args {
 		if arg == "--integration-test" {
 			inTests = true
-			os.Args = append(os.Args[:i], os.Args[i+1:]...)
 		} else if arg == "--insecure-skip-verify" {
 			http.DefaultClient.Transport = &http.Transport{
 				TLSClientConfig: &tls.Config{
 					InsecureSkipVerify: true,
 				},
 			}
-			os.Args = append(os.Args[:i], os.Args[i+1:]...)
+		} else {
+			newArgs = append(newArgs, arg)
 		}
 	}
+	os.Args = newArgs
 }
 
 func main() {
