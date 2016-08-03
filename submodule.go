@@ -90,6 +90,8 @@ func addVendorSubmodule(importpath string) error {
 	return errors.New(strings.Join(errs, "\n"))
 }
 
+const tag = "meta[name=go-import]"
+
 func getHttpsURLForImportPath(importpath string) (url string, err error) {
 	url = "https://" + importpath
 	for _, site := range wellKnownSites {
@@ -105,18 +107,21 @@ func getHttpsURLForImportPath(importpath string) (url string, err error) {
 	if err != nil {
 		return
 	}
-	doc.Find("meta[name=go-import]").Each(func(_ int, selection *goquery.Selection) {
+	doc.Find(tag).Each(func(_ int, selection *goquery.Selection) {
 		if err != nil {
 			return
 		}
 		content, exists := selection.Attr("content")
 		if !exists {
-			err = fmt.Errorf(`"content" attribute not found in meta name="go-import" at %s`, url)
+			err = fmt.Errorf(`"content" attribute not found in `+
+				`meta name="go-import" at %s`, url)
 			return
 		}
 		terms := strings.Fields(content)
 		if len(terms) != 3 {
-			err = fmt.Errorf(`invalid formatted "content" attribute in meta name="go-import" at %s`, url)
+			err = fmt.Errorf(
+				`invalid formatted "content" attribute in `+
+					`meta name="go-import" at %s`, url)
 			return
 		}
 		prefix := terms[0]
