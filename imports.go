@@ -99,6 +99,10 @@ func parseImports(recursive bool) ([]string, error) {
 				continue
 			}
 
+			if inTests {
+				importpath = strings.Replace(importpath, "__blankd__", "localhost:60001", -1)
+			}
+
 			if isOwnPackage(importpath, cwd) {
 				continue
 			}

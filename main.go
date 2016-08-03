@@ -1,8 +1,11 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"log"
+	"net/http"
+	"os"
 	"strconv"
 	"strings"
 
@@ -46,7 +49,26 @@ Options:
 
 var (
 	verbose bool
+	inTests bool
 )
+
+func init() {
+	newArgs := make([]string, 0, len(os.Args))
+	for _, arg := range os.Args {
+		if arg == "--integration-test" {
+			inTests = true
+		} else if arg == "--insecure-skip-verify" {
+			http.DefaultClient.Transport = &http.Transport{
+				TLSClientConfig: &tls.Config{
+					InsecureSkipVerify: true,
+				},
+			}
+		} else {
+			newArgs = append(newArgs, arg)
+		}
+	}
+	os.Args = newArgs
+}
 
 func main() {
 	args := godocs.MustParse(usage, version)
