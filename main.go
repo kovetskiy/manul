@@ -168,7 +168,11 @@ func handleInstall(recursive bool, dependencies []string) error {
 	}
 
 	if added > 0 {
-		fmt.Printf("added %d submodules\n", added)
+		if added == 1 {
+			fmt.Println("added 1 submodule")
+		} else {
+			fmt.Printf("added %d submodules\n", added)
+		}
 	} else {
 		fmt.Printf("all dependencies already vendored\n")
 	}
@@ -206,7 +210,11 @@ func handleUpdate(recursive bool, dependencies []string) error {
 	}
 
 	if updated > 0 {
-		fmt.Printf("updated %d dependencies\n", updated)
+		if updated == 1 {
+			fmt.Println("updated 1 dependency")
+		} else {
+			fmt.Printf("updated %d dependencies\n", updated)
+		}
 	} else {
 		fmt.Printf("nothing to update\n")
 	}
@@ -321,7 +329,11 @@ func handleClean(recursive bool) error {
 	}
 
 	if removed > 0 {
-		fmt.Printf("removed %d unused vendors\n", removed)
+		if removed == 1 {
+			fmt.Println("removed 1 unused vendor")
+		} else {
+			fmt.Printf("removed %d unused vendors\n", removed)
+		}
 	} else {
 		fmt.Printf("nothing to remove\n")
 	}
