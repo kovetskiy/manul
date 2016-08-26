@@ -12,7 +12,7 @@ GO
 
 tests:ensure :manul -I github.com/kovetskiy/manul-test-foo
 tests:assert-no-diff stdout <<VENDORS
-added 1 submodules
+added 1 submodule
 VENDORS
 
 tests:assert-stderr "adding submodule for github.com/kovetskiy/manul-test-foo"
