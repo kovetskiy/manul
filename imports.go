@@ -35,6 +35,7 @@ func recursiveParseImports(
 	for _, importing := range pkg.Imports {
 		_, ok := imports[importing]
 		if !ok {
+			importing = strings.Replace(importing, "golang_org/", "golang.org/", 1)
 			err = recursiveParseImports(imports, importing, cwd)
 			if err != nil {
 				return err
