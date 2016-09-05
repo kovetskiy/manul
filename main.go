@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	version = `manul 1.3`
+	version = `manul 1.4`
 	usage   = version + `
 
 manul is the tool for vendoring dependencies using git submodule technology.

@@ -16,6 +16,11 @@ func recursiveParseImports(
 		return nil
 	}
 
+	// catch internal vendoring in net/http since go 1.7
+	if strings.HasPrefix(path, "golang_org/") {
+		return nil
+	}
+
 	pkg, err := build.Import(path, cwd, build.IgnoreVendor)
 	if err != nil {
 		return err
