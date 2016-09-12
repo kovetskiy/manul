@@ -4,7 +4,7 @@ import (
 	"log"
 	"os/exec"
 
-	"github.com/kovetskiy/executil"
+	"github.com/reconquest/executil-go"
 )
 
 func execute(cmd *exec.Cmd) (string, error) {
