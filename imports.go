@@ -29,8 +29,7 @@ func recursiveParseImports(
 	if path != "." {
 		standard := false
 
-		if strings.HasPrefix(pkg.ImportPath, "golang.org/") ||
-			(pkg.Goroot && pkg.ImportPath != "") {
+		if pkg.Goroot && pkg.ImportPath != "" {
 			standard = true
 		}
 
