@@ -103,7 +103,7 @@ func getHttpsURLForImportPath(importpath string) (url string, err error) {
 	// NOTE: Parse <meta name="go-import" content="import-prefix vcs repo-root">
 	// For detail, see the output of "go help importpath"
 	var doc *goquery.Document
-	doc, err = goquery.NewDocument(url)
+	doc, err = goquery.NewDocument(url + "?go-get=1")
 	if err != nil {
 		return
 	}
