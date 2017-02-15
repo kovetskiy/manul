@@ -40,7 +40,7 @@ Options:
     -Q --query      List all dependencies.
         -o          List only already-vendored dependencies.
     -C --clean      Detect all unused vendored dependencies and remove it.
-	-t --testing    Include testing dependencies.
+    -t --testing    Include testing dependencies.
     -r --recursive  Be recursive.
     -h --help       Show help message.
     -v --verbose    Be verbose.
