@@ -1,135 +1,167 @@
 package main
 
 import (
-	"go/build"
-	"log"
+	"bufio"
+	"encoding/json"
+	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"sort"
 	"strings"
 )
 
-func recursiveParseImports(
-	imports map[string]bool, path string, cwd string,
-) error {
-	if path == "C" {
-		return nil
-	}
-
-	// catch internal vendoring in net/http since go 1.7
-	if strings.HasPrefix(path, "golang_org/") {
-		return nil
-	}
-
-	pkg, err := build.Import(path, cwd, build.IgnoreVendor)
+func parseImports(recursive bool, testDependencies bool) ([]string, error) {
+	var imports []string
+	packages, err := listPackages()
 	if err != nil {
-		return err
+		return imports, nil
 	}
 
-	if path != "." {
-		standard := false
+	ensureDependenciesExist(packages, testDependencies)
 
-		if pkg.Goroot && pkg.ImportPath != "" {
-			standard = true
-		}
-
-		imports[pkg.ImportPath] = standard
-	}
-
-	for _, importing := range pkg.Imports {
-		_, ok := imports[importing]
-		if !ok {
-			err = recursiveParseImports(imports, importing, cwd)
-			if err != nil {
-				return err
-			}
-		}
-	}
-
-	return nil
-}
-
-func parseImports(recursive bool) ([]string, error) {
-	cwd, err := os.Getwd()
+	imports, err = calculateDependencies(packages, recursive, testDependencies)
 	if err != nil {
-		return nil, err
+		return imports, err
 	}
 
-	var (
-		allImports = map[string]bool{}
-		imports    = []string{}
-	)
-
-	filepath.Walk(
-		cwd, func(path string, info os.FileInfo, err error) error {
-			if err != nil {
-				return err
-			}
-
-			if filepath.Base(path) == ".git" ||
-				filepath.Dir(path) == filepath.Join(cwd, "vendor") {
-				return filepath.SkipDir
-			}
-
-			if path == filepath.Join(cwd, "vendor") {
-				return nil
-			}
-
-			if !info.IsDir() {
-				return nil
-			}
-
-			err = recursiveParseImports(
-				allImports,
-				".",
-				path,
-			)
-			if _, ok := err.(*build.NoGoError); ok {
-				return nil
-			}
-
-			if err != nil {
-				log.Println(err)
-			}
-
-			return nil
-		},
-	)
-
-	for importing, standard := range allImports {
-		if !standard {
-			importpath, err := getRootImportpath(importing)
-			if err != nil {
-				continue
-			}
-
-			if inTests {
-				importpath = strings.Replace(importpath, "__blankd__", "localhost:60001", -1)
-			}
-
-			if isOwnPackage(importpath, cwd) {
-				continue
-			}
-
-			found := false
-			for _, imported := range imports {
-				if importpath == imported {
-					found = true
-					break
-				}
-			}
-
-			if found {
-				continue
-			}
-
-			imports = append(imports, importpath)
-		}
-	}
+	imports = filterPackages(imports)
 
 	sort.Strings(imports)
 
 	return imports, nil
+
+}
+
+func calculateDependencies(packages []string, recursive, testDependencies bool) ([]string, error) {
+	var deps, imports, testImports, testDeps []string
+
+	for _, pkg := range packages {
+		data, err := list(pkg)
+		if err != nil {
+			return imports, nil
+		}
+
+		if recursive {
+			deps = append(deps, data.Deps...)
+		} else {
+			deps = append(deps, data.Imports...)
+		}
+
+		if testDependencies {
+			testImports = append(testImports, data.TestImports...)
+		}
+	}
+
+	testImports = unique(testImports)
+	if recursive {
+		for _, i := range testImports {
+			testData, err := list(i)
+			if err != nil {
+				return imports, nil
+			}
+			testDeps = append(testDeps, testData.Deps...)
+		}
+
+		deps = append(deps, testDeps...)
+	}
+
+	deps = append(deps, testImports...)
+	deps = unique(deps)
+
+	return deps, nil
+}
+
+func filterPackages(packages []string) []string {
+	var imports []string
+	cwd, _ := os.Getwd()
+
+	for _, importing := range packages {
+		importpath, err := getRootImportpath(importing)
+		if err != nil {
+			continue
+		}
+
+		if inTests {
+			importpath = strings.Replace(importpath, "__blankd__", "localhost:60001", -1)
+		}
+
+		if isOwnPackage(importpath, cwd) {
+			continue
+		}
+
+		// Skip anything that is already vendored upstream
+		if strings.Contains(importpath, "/vendor/") {
+			continue
+		}
+
+		found := false
+		for _, imported := range imports {
+			if importpath == imported {
+				found = true
+				break
+			}
+		}
+
+		if found {
+			continue
+		}
+
+		imports = append(imports, importpath)
+	}
+
+	return imports
+}
+
+func ensureDependenciesExist(packages []string, includeTestingDependencies bool) {
+	args := []string{"get"}
+	if includeTestingDependencies {
+		args = append(args, "-t")
+	}
+	args = append(args, packages...)
+
+	out, err := execute(exec.Command("go", args...))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s\n", out)
+	}
+}
+
+func list(pkg string) (listOutput, error) {
+	data := listOutput{}
+
+	out, err := execute(exec.Command("go", "list", "-e", "-json", pkg))
+	if err != nil {
+		return data, err
+	}
+
+	err = json.Unmarshal([]byte(out), &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
+}
+
+func listPackages() ([]string, error) {
+	var packages []string
+
+	out, err := execute(exec.Command("go", "list", "./..."))
+	if err != nil {
+		return packages, err
+	}
+
+	r := strings.NewReader(out)
+	s := bufio.NewScanner(r)
+	for s.Scan() {
+		pkg := s.Text()
+		if strings.Contains(pkg, "/vendor/") {
+			continue
+		}
+
+		packages = append(packages, pkg)
+	}
+
+	return packages, nil
 }
 
 func isOwnPackage(path, cwd string) bool {
@@ -139,4 +171,24 @@ func isOwnPackage(path, cwd string) bool {
 		}
 	}
 	return false
+}
+
+func unique(input []string) []string {
+	u := make([]string, 0, len(input))
+	m := make(map[string]bool)
+
+	for _, val := range input {
+		if _, ok := m[val]; !ok {
+			m[val] = true
+			u = append(u, val)
+		}
+	}
+
+	return u
+}
+
+type listOutput struct {
+	Imports     []string
+	Deps        []string
+	TestImports []string
 }

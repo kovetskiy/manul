@@ -40,6 +40,7 @@ Options:
     -Q --query      List all dependencies.
         -o          List only already-vendored dependencies.
     -C --clean      Detect all unused vendored dependencies and remove it.
+	-t --testing    Include testing dependencies.
     -r --recursive  Be recursive.
     -h --help       Show help message.
     -v --verbose    Be verbose.
@@ -82,7 +83,8 @@ func main() {
 
 		dependencies, _ = args["<dependency>"].([]string)
 
-		recursive = args["--recursive"].(bool)
+		recursive        = args["--recursive"].(bool)
+		testDependencies = args["--testing"].(bool)
 	)
 
 	verbose = args["--verbose"].(bool)
@@ -90,20 +92,20 @@ func main() {
 	var err error
 	switch {
 	case modeInstall:
-		err = handleInstall(recursive, dependencies)
+		err = handleInstall(recursive, testDependencies, dependencies)
 
 	case modeUpdate:
-		err = handleUpdate(recursive, dependencies)
+		err = handleUpdate(recursive, testDependencies, dependencies)
 
 	case modeQuery:
 		onlyVendored := args["-o"].(bool)
-		err = handleQuery(recursive, onlyVendored)
+		err = handleQuery(recursive, testDependencies, onlyVendored)
 
 	case modeRemove:
 		err = handleRemove(dependencies)
 
 	case modeClean:
-		err = handleClean(recursive)
+		err = handleClean(recursive, testDependencies)
 	}
 
 	if err != nil {
@@ -111,8 +113,8 @@ func main() {
 	}
 }
 
-func handleInstall(recursive bool, dependencies []string) error {
-	imports, err := parseImports(recursive)
+func handleInstall(recursive bool, testDependencies bool, dependencies []string) error {
+	imports, err := parseImports(recursive, testDependencies)
 	if err != nil {
 		return err
 	}
@@ -180,10 +182,10 @@ func handleInstall(recursive bool, dependencies []string) error {
 	return nil
 }
 
-func handleUpdate(recursive bool, dependencies []string) error {
+func handleUpdate(recursive bool, testDependencies bool, dependencies []string) error {
 	var err error
 	if len(dependencies) == 0 {
-		dependencies, err = parseImports(recursive)
+		dependencies, err = parseImports(recursive, testDependencies)
 		if err != nil {
 			return err
 		}
@@ -251,7 +253,7 @@ func handleRemove(dependencies []string) error {
 	return nil
 }
 
-func handleQuery(recursive, onlyVendored bool) error {
+func handleQuery(recursive, testDependencies, onlyVendored bool) error {
 	submodules, err := getVendorSubmodules()
 	if err != nil {
 		return err
@@ -265,7 +267,7 @@ func handleQuery(recursive, onlyVendored bool) error {
 			fmt.Printf(format, submodule, commit)
 		}
 	} else {
-		imports, err := parseImports(recursive)
+		imports, err := parseImports(recursive, testDependencies)
 		if err != nil {
 			return err
 		}
@@ -293,8 +295,8 @@ func handleQuery(recursive, onlyVendored bool) error {
 	return nil
 }
 
-func handleClean(recursive bool) error {
-	imports, err := parseImports(recursive)
+func handleClean(recursive, testDependencies bool) error {
+	imports, err := parseImports(recursive, testDependencies)
 	if err != nil {
 		return err
 	}

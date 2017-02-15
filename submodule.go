@@ -190,6 +190,9 @@ func getRootImportpath(importpath string) (string, error) {
 		return "", err
 	}
 
+	cwd, _ := os.Getwd()
+	vendorPath := strings.TrimPrefix(cwd, pkg.SrcRoot+"/") + "/vendor/"
+
 	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
 	cmd.Dir = filepath.Join(pkg.SrcRoot, importpath)
 
@@ -198,8 +201,7 @@ func getRootImportpath(importpath string) (string, error) {
 		return "", err
 	}
 
-	return strings.Trim(
+	return strings.TrimPrefix(strings.Trim(
 		strings.TrimSpace(strings.TrimPrefix(rootdir, pkg.SrcRoot)),
-		"/",
-	), nil
+		"/"), vendorPath), nil
 }
