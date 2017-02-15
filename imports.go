@@ -15,7 +15,7 @@ func parseImports(recursive bool, testDependencies bool) ([]string, error) {
 	var imports []string
 	packages, err := listPackages()
 	if err != nil {
-		return imports, nil
+		return imports, fmt.Errorf("error listing packages: %s", err)
 	}
 
 	ensureDependenciesExist(packages, testDependencies)
@@ -145,7 +145,7 @@ func list(pkg string) (listOutput, error) {
 func listPackages() ([]string, error) {
 	var packages []string
 
-	out, err := execute(exec.Command("go", "list", "./..."))
+	out, err := execute(exec.Command("go", "list", "-e", "./..."))
 	if err != nil {
 		return packages, err
 	}
