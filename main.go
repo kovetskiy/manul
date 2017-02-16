@@ -73,7 +73,8 @@ func init() {
 
 	cwd, err := os.Getwd()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "couldn't get current working directory: %s\n", err)
+		fmt.Fprintf(os.Stderr,
+			"can't get current working directory: %s\n", err)
 		os.Exit(1)
 	}
 	workdir = cwd
@@ -91,8 +92,8 @@ func main() {
 
 		dependencies, _ = args["<dependency>"].([]string)
 
-		recursive        = args["--recursive"].(bool)
-		testDependencies = args["--testing"].(bool)
+		recursive       = args["--recursive"].(bool)
+		includeTestDeps = args["--testing"].(bool)
 	)
 
 	verbose = args["--verbose"].(bool)
@@ -100,20 +101,20 @@ func main() {
 	var err error
 	switch {
 	case modeInstall:
-		err = handleInstall(recursive, testDependencies, dependencies)
+		err = handleInstall(recursive, includeTestDeps, dependencies)
 
 	case modeUpdate:
-		err = handleUpdate(recursive, testDependencies, dependencies)
+		err = handleUpdate(recursive, includeTestDeps, dependencies)
 
 	case modeQuery:
 		onlyVendored := args["-o"].(bool)
-		err = handleQuery(recursive, testDependencies, onlyVendored)
+		err = handleQuery(recursive, includeTestDeps, onlyVendored)
 
 	case modeRemove:
 		err = handleRemove(dependencies)
 
 	case modeClean:
-		err = handleClean(recursive, testDependencies)
+		err = handleClean(recursive, includeTestDeps)
 	}
 
 	if err != nil {
@@ -121,8 +122,9 @@ func main() {
 	}
 }
 
-func handleInstall(recursive bool, testDependencies bool, dependencies []string) error {
-	imports, err := parseImports(recursive, testDependencies)
+func handleInstall(recursive bool, includeTestDeps bool,
+	dependencies []string) error {
+	imports, err := parseImports(recursive, includeTestDeps)
 	if err != nil {
 		return err
 	}
@@ -190,10 +192,11 @@ func handleInstall(recursive bool, testDependencies bool, dependencies []string)
 	return nil
 }
 
-func handleUpdate(recursive bool, testDependencies bool, dependencies []string) error {
+func handleUpdate(recursive bool, includeTestDeps bool,
+	dependencies []string) error {
 	var err error
 	if len(dependencies) == 0 {
-		dependencies, err = parseImports(recursive, testDependencies)
+		dependencies, err = parseImports(recursive, includeTestDeps)
 		if err != nil {
 			return err
 		}
@@ -261,7 +264,7 @@ func handleRemove(dependencies []string) error {
 	return nil
 }
 
-func handleQuery(recursive, testDependencies, onlyVendored bool) error {
+func handleQuery(recursive, includeTestDeps, onlyVendored bool) error {
 	submodules, err := getVendorSubmodules()
 	if err != nil {
 		return err
@@ -275,7 +278,7 @@ func handleQuery(recursive, testDependencies, onlyVendored bool) error {
 			fmt.Printf(format, submodule, commit)
 		}
 	} else {
-		imports, err := parseImports(recursive, testDependencies)
+		imports, err := parseImports(recursive, includeTestDeps)
 		if err != nil {
 			return err
 		}
@@ -303,8 +306,8 @@ func handleQuery(recursive, testDependencies, onlyVendored bool) error {
 	return nil
 }
 
-func handleClean(recursive, testDependencies bool) error {
-	imports, err := parseImports(recursive, testDependencies)
+func handleClean(recursive, includeTestDeps bool) error {
+	imports, err := parseImports(recursive, includeTestDeps)
 	if err != nil {
 		return err
 	}

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -43,13 +42,15 @@ func parseImports(recursive bool, testDependencies bool) ([]string, error) {
 	return imports, nil
 }
 
-func calculateDependencies(packages []string, recursive, testDependencies bool) ([]string, error) {
+func calculateDependencies(packages []string, recursive,
+	testDependencies bool) ([]string, error) {
 	var deps, imports, testImports, testDeps []string
 
 	for _, pkg := range packages {
 		data, err := list(pkg)
 		if err != nil {
-			return imports, fmt.Errorf("failed to list dependencies for %s: %s", pkg, err)
+			return imports,
+				fmt.Errorf("failed to list dependencies for %s: %s", pkg, err)
 		}
 
 		if recursive {
@@ -68,7 +69,9 @@ func calculateDependencies(packages []string, recursive, testDependencies bool) 
 		for _, testImport := range testImports {
 			testData, err := list(testImport)
 			if err != nil {
-				return imports, fmt.Errorf("failed to list dependencies for testing package %s: %s", testImport, err)
+				return imports, fmt.Errorf(
+					"failed to list dependencies for testing package %s: %s",
+					testImport, err)
 			}
 			testDeps = append(testDeps, testData.Deps...)
 		}
@@ -92,7 +95,8 @@ func filterPackages(packages []string) []string {
 		}
 
 		if inTests {
-			importpath = strings.Replace(importpath, "__blankd__", "localhost:60001", -1)
+			importpath = strings.Replace(importpath,
+				"__blankd__", "localhost:60001", -1)
 		}
 
 		if isOwnPackage(importpath) {
@@ -122,16 +126,16 @@ func filterPackages(packages []string) []string {
 	return imports
 }
 
-func ensureDependenciesExist(packages []string, includeTestingDependencies bool) error {
+func ensureDependenciesExist(packages []string, includeTestDeps bool) error {
 	args := []string{"get"}
-	if includeTestingDependencies {
+	if includeTestDeps {
 		args = append(args, "-t")
 	}
 	args = append(args, packages...)
 
 	out, err := execute(exec.Command("go", args...))
 	if err != nil {
-		return fmt.Errorf("couldn't 'go get' dependencies:\n%s", out)
+		return fmt.Errorf("can't 'go get' dependencies:\n%s", out)
 	}
 
 	return nil
@@ -147,7 +151,8 @@ func list(pkg string) (listOutput, error) {
 
 	err = json.Unmarshal([]byte(out), &data)
 	if err != nil {
-		return data, fmt.Errorf("can't unmarshal go list JSON output: %s\n%q", err, out)
+		return data,
+			fmt.Errorf("can't unmarshal go list JSON output: %s\n%q", err, out)
 	}
 
 	return data, nil
@@ -161,10 +166,7 @@ func listPackages() ([]string, error) {
 		return packages, err
 	}
 
-	r := strings.NewReader(out)
-	s := bufio.NewScanner(r)
-	for s.Scan() {
-		pkg := s.Text()
+	for _, pkg := range strings.Split(strings.TrimSpace(out), "\n") {
 		if strings.Contains(pkg, "/vendor/") {
 			continue
 		}
