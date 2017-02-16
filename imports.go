@@ -25,10 +25,10 @@ func parseImports(recursive bool, testDependencies bool) ([]string, error) {
 	}
 
 	// Ensuring our dependencies exists isn't a strict requirement, therefore
-	// only print a message to stderr rather then completely failing
+	// only print a message to stderr rather then completely failing.
 	err = ensureDependenciesExist(packages, testDependencies)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s", err)
+		fmt.Fprintf(os.Stderr, "%s\n", err)
 	}
 
 	imports, err = calculateDependencies(packages, recursive, testDependencies)
@@ -84,7 +84,6 @@ func calculateDependencies(packages []string, recursive, testDependencies bool) 
 
 func filterPackages(packages []string) []string {
 	var imports []string
-	cwd, _ := os.Getwd()
 
 	for _, importing := range packages {
 		importpath, err := getRootImportpath(importing)
@@ -96,7 +95,7 @@ func filterPackages(packages []string) []string {
 			importpath = strings.Replace(importpath, "__blankd__", "localhost:60001", -1)
 		}
 
-		if isOwnPackage(importpath, cwd) {
+		if isOwnPackage(importpath) {
 			continue
 		}
 
@@ -132,7 +131,7 @@ func ensureDependenciesExist(packages []string, includeTestingDependencies bool)
 
 	out, err := execute(exec.Command("go", args...))
 	if err != nil {
-		return fmt.Errorf("couldn't go get dependencies:\n %s", out)
+		return fmt.Errorf("couldn't 'go get' dependencies:\n%s", out)
 	}
 
 	return nil
@@ -176,9 +175,9 @@ func listPackages() ([]string, error) {
 	return packages, nil
 }
 
-func isOwnPackage(path, cwd string) bool {
+func isOwnPackage(path string) bool {
 	for _, gopath := range filepath.SplitList(os.Getenv("GOPATH")) {
-		if strings.HasPrefix(filepath.Join(gopath, "src", path), cwd) {
+		if strings.HasPrefix(filepath.Join(gopath, "src", path), workdir) {
 			return true
 		}
 	}

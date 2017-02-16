@@ -51,6 +51,7 @@ Options:
 var (
 	verbose bool
 	inTests bool
+	workdir string
 )
 
 func init() {
@@ -69,6 +70,12 @@ func init() {
 		}
 	}
 	os.Args = newArgs
+
+	cwd, err := os.Getwd()
+	if err != nil {
+		panic(fmt.Errorf("couldn't get current working directory: %s", err))
+	}
+	workdir = cwd
 }
 
 func main() {
