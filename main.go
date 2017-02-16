@@ -73,7 +73,8 @@ func init() {
 
 	cwd, err := os.Getwd()
 	if err != nil {
-		panic(fmt.Errorf("couldn't get current working directory: %s", err))
+		fmt.Fprintf(os.Stderr, "couldn't get current working directory: %s\n", err)
+		os.Exit(1)
 	}
 	workdir = cwd
 }
