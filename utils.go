@@ -1,22 +1,14 @@
 package main
 
 import (
-	"log"
 	"os/exec"
 
-	"github.com/reconquest/executil-go"
+	"github.com/reconquest/lexec-go"
 )
 
 func execute(cmd *exec.Cmd) (string, error) {
-	if verbose {
-		if cmd.Dir != "" {
-			log.Printf("exec %q in %s", cmd.Args, cmd.Dir)
-		} else {
-			log.Printf("exec %q", cmd.Args)
-		}
-	}
-
-	stdout, stderr, err := executil.Run(cmd)
+	execution := lexec.NewExec(lexec.Loggerf(logger.Debugf), cmd)
+	stdout, stderr, err := execution.Output()
 	return string(stdout) + string(stderr), err
 }
 

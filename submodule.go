@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"go/build"
 	"os/exec"
@@ -9,7 +8,10 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/reconquest/ser-go"
 )
+
+const tagMetaGoImport = "meta[name=go-import]"
 
 // NOTE: This list is copied from
 // https://github.com/golang/go/blob/10538a8f9e2e718a47633ac5a6e90415a2c3f5f1/src/cmd/go/vcs.go#L821-L861
@@ -26,7 +28,9 @@ func getVendorSubmodules() (map[string]string, error) {
 		exec.Command("git", "submodule", "status"),
 	)
 	if err != nil {
-		return nil, err
+		return nil, ser.Errorf(
+			err, "unable to get submodules status",
+		)
 	}
 
 	vendors := map[string]string{}
@@ -51,7 +55,7 @@ func getVendorSubmodules() (map[string]string, error) {
 	return vendors, nil
 }
 
-func addVendorSubmodule(importpath string) error {
+func addVendorSubmodule(importpath string) []error {
 	var (
 		target   = "vendor/" + importpath
 		prefixes = []string{
@@ -60,7 +64,7 @@ func addVendorSubmodule(importpath string) error {
 			"git://",
 		}
 
-		errs []string
+		errs []error
 	)
 
 	for _, prefix := range prefixes {
@@ -69,7 +73,7 @@ func addVendorSubmodule(importpath string) error {
 			var err error
 			url, err = getHttpsURLForImportPath(importpath)
 			if err != nil {
-				errs = append(errs, err.Error())
+				errs = append(errs, err)
 				continue
 			}
 		} else {
@@ -83,13 +87,11 @@ func addVendorSubmodule(importpath string) error {
 			return nil
 		}
 
-		errs = append(errs, err.Error())
+		errs = append(errs, err)
 	}
 
-	return errors.New(strings.Join(errs, "\n"))
+	return errs
 }
-
-const tag = "meta[name=go-import]"
 
 func getHttpsURLForImportPath(importpath string) (url string, err error) {
 	url = "https://" + importpath
@@ -104,36 +106,45 @@ func getHttpsURLForImportPath(importpath string) (url string, err error) {
 	var doc *goquery.Document
 	doc, err = goquery.NewDocument(url + "?go-get=1")
 	if err != nil {
-		return
+		return "", err
 	}
-	doc.Find(tag).Each(func(_ int, selection *goquery.Selection) {
+
+	doc.Find(tagMetaGoImport).Each(func(_ int, selection *goquery.Selection) {
 		if err != nil {
 			return
 		}
-		content, exists := selection.Attr("content")
-		if !exists {
-			err = fmt.Errorf(`"content" attribute not found in `+
-				`meta name="go-import" at %s`, url)
+
+		content, ok := selection.Attr("content")
+		if !ok {
+			err = fmt.Errorf(
+				`"content" attribute not found in `+
+					`meta name="go-import" at %s`,
+				url,
+			)
 			return
 		}
+
 		terms := strings.Fields(content)
 		if len(terms) != 3 {
 			err = fmt.Errorf(
 				`invalid formatted "content" attribute in `+
-					`meta name="go-import" at %s`, url)
+					`meta name="go-import" at %s`, url,
+			)
 			return
 		}
-		prefix := terms[0]
-		vcs := terms[1]
-		repoRoot := terms[2]
+
+		var (
+			prefix   = terms[0]
+			vcs      = terms[1]
+			repoRoot = terms[2]
+		)
+
 		if strings.HasPrefix(importpath, prefix) && vcs == "git" {
 			url = repoRoot
 		}
 	})
-	if err != nil {
-		return "", err
-	}
-	return url, nil
+
+	return url, err
 }
 
 func removeVendorSubmodule(importpath string) error {
@@ -143,8 +154,8 @@ func removeVendorSubmodule(importpath string) error {
 		exec.Command("git", "submodule", "deinit", "-f", vendor),
 	)
 	if err != nil {
-		return fmt.Errorf(
-			"can't deinit submodule: %s", err,
+		return ser.Errorf(
+			err, "unable to deinit vendor submodule: %s", vendor,
 		)
 	}
 
@@ -152,8 +163,8 @@ func removeVendorSubmodule(importpath string) error {
 		exec.Command("git", "rm", "--force", vendor),
 	)
 	if err != nil {
-		return fmt.Errorf(
-			"can't remove submodule directory: %s", err,
+		return ser.Errorf(
+			err, "unable to remove vendor directory: %s", vendor,
 		)
 	}
 
@@ -161,8 +172,8 @@ func removeVendorSubmodule(importpath string) error {
 		exec.Command("rm", "-r", filepath.Join(".git", "modules", vendor)),
 	)
 	if err != nil {
-		return fmt.Errorf(
-			"can't remove submodule directory in .git/modules: %s", err,
+		return ser.Errorf(
+			err, "unable to remove .git/modules/%s directory", vendor,
 		)
 	}
 
@@ -170,11 +181,13 @@ func removeVendorSubmodule(importpath string) error {
 }
 
 func updateVendorSubmodule(importpath string) error {
-	cmd := exec.Command("git", "pull", "origin", "master")
-	cmd.Dir = filepath.Join(workdir, "vendor", importpath)
+	cmd := exec.Command(
+		"git",
+		"-C", filepath.Join(workdir, "vendor", importpath),
+		"pull", "origin", "master",
+	)
 
 	_, err := execute(cmd)
-
 	return err
 }
 
@@ -186,15 +199,26 @@ func getRootImportpath(importpath string) (string, error) {
 
 	vendorPath := strings.TrimPrefix(workdir, pkg.SrcRoot+"/") + "/vendor/"
 
-	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
-	cmd.Dir = filepath.Join(pkg.SrcRoot, importpath)
+	cmd := exec.Command(
+		"git",
+		"-C", filepath.Join(pkg.SrcRoot, importpath),
+		"rev-parse", "--show-toplevel",
+	)
 
 	rootdir, err := execute(cmd)
 	if err != nil {
 		return "", err
 	}
 
-	return strings.TrimPrefix(strings.Trim(
-		strings.TrimSpace(strings.TrimPrefix(rootdir, pkg.SrcRoot)),
-		"/"), vendorPath), nil
+	return strings.TrimPrefix(
+		strings.Trim(
+			strings.TrimSpace(
+				strings.TrimPrefix(
+					rootdir,
+					pkg.SrcRoot,
+				),
+			), "/",
+		),
+		vendorPath,
+	), nil
 }

@@ -3,17 +3,19 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 
 	"github.com/kovetskiy/godocs"
+	"github.com/kovetskiy/lorg"
+	"github.com/reconquest/hierr-go"
+	"github.com/reconquest/ser-go"
 )
 
 const (
-	version = `manul 1.4`
+	version = `manul 1.5`
 	usage   = version + `
 
 manul is the tool for vendoring dependencies using git submodule technology.
@@ -50,15 +52,18 @@ Options:
 
 var (
 	verbose bool
-	inTests bool
+	testing bool
 	workdir string
+	logger  = lorg.NewLog()
 )
 
 func init() {
+	var err error
+
 	newArgs := make([]string, 0, len(os.Args))
 	for _, arg := range os.Args {
 		if arg == "--integration-test" {
-			inTests = true
+			testing = true
 		} else if arg == "--insecure-skip-verify" {
 			http.DefaultClient.Transport = &http.Transport{
 				TLSClientConfig: &tls.Config{
@@ -71,13 +76,15 @@ func init() {
 	}
 	os.Args = newArgs
 
-	cwd, err := os.Getwd()
+	workdir, err = os.Getwd()
 	if err != nil {
-		fmt.Fprintf(os.Stderr,
-			"can't get current working directory: %s\n", err)
-		os.Exit(1)
+		hierr.Fatalf(
+			err,
+			"unable to get current working directory",
+		)
 	}
-	workdir = cwd
+
+	logger.SetIndentLines(true)
 }
 
 func main() {
@@ -94,9 +101,13 @@ func main() {
 
 		recursive       = args["--recursive"].(bool)
 		includeTestDeps = args["--testing"].(bool)
+
+		verbose = args["--verbose"].(bool)
 	)
 
-	verbose = args["--verbose"].(bool)
+	if verbose {
+		logger.SetLevel(lorg.LevelDebug)
+	}
 
 	var err error
 	switch {
@@ -118,7 +129,7 @@ func main() {
 	}
 
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 }
 
@@ -152,7 +163,7 @@ func handleInstall(recursive bool, includeTestDeps bool,
 			}
 
 			if !found {
-				return fmt.Errorf("unknown dependency %s", dependency)
+				return fmt.Errorf("unknown dependency: %s", dependency)
 			}
 		}
 
@@ -165,15 +176,19 @@ func handleInstall(recursive bool, includeTestDeps bool,
 		}
 
 		if vendored {
-			log.Printf("skipping %s, already vendored", dependency)
+			logger.Debugf("skipping %s, already vendored", dependency)
 			continue
 		}
 
-		log.Printf("adding submodule for %s", dependency)
+		logger.Infof("adding submodule for %s", dependency)
 
-		err := addVendorSubmodule(dependency)
-		if err != nil {
-			return err
+		errs := addVendorSubmodule(dependency)
+		if errs != nil {
+			top := fmt.Errorf("unable to add submodule for %s", dependency)
+			for _, err := range errs {
+				top = ser.Push(top, err)
+			}
+			return top
 		}
 
 		added++
@@ -181,12 +196,12 @@ func handleInstall(recursive bool, includeTestDeps bool,
 
 	if added > 0 {
 		if added == 1 {
-			fmt.Println("added 1 submodule")
+			logger.Infof("added 1 submodule")
 		} else {
-			fmt.Printf("added %d submodules\n", added)
+			logger.Infof("added %d submodules\n", added)
 		}
 	} else {
-		fmt.Printf("all dependencies already vendored\n")
+		logger.Infof("all dependencies already vendored\n")
 	}
 
 	return nil
@@ -213,7 +228,8 @@ func handleUpdate(recursive bool, includeTestDeps bool,
 			return fmt.Errorf("unknown dependency %s", importpath)
 		}
 
-		log.Printf("updating dependency %s", importpath)
+		logger.Infof("updating vendor submodule %s", importpath)
+
 		err := updateVendorSubmodule(importpath)
 		if err != nil {
 			return err
@@ -224,12 +240,12 @@ func handleUpdate(recursive bool, includeTestDeps bool,
 
 	if updated > 0 {
 		if updated == 1 {
-			fmt.Println("updated 1 dependency")
+			logger.Infof("updated 1 dependency submodule")
 		} else {
-			fmt.Printf("updated %d dependencies\n", updated)
+			logger.Infof("updated %d dependencies submodules\n", updated)
 		}
 	} else {
-		fmt.Printf("nothing to update\n")
+		logger.Infof("nothing to update")
 	}
 
 	return nil
@@ -254,7 +270,8 @@ func handleRemove(dependencies []string) error {
 			}
 		}
 
-		log.Printf("removing vendor %s", dependency)
+		logger.Infof("removing vendor %s", dependency)
+
 		err := removeVendorSubmodule(dependency)
 		if err != nil {
 			return err
@@ -331,11 +348,13 @@ func handleClean(recursive, includeTestDeps bool) error {
 			continue
 		}
 
-		log.Printf("removing unused vendor %s", submodule)
+		logger.Infof("removing unused vendor submodule %s", submodule)
 
 		err := removeVendorSubmodule(submodule)
 		if err != nil {
-			return err
+			return ser.Errorf(
+				err, "unable to remove vendor submodule: %s", submodule,
+			)
 		}
 
 		removed++
@@ -343,12 +362,12 @@ func handleClean(recursive, includeTestDeps bool) error {
 
 	if removed > 0 {
 		if removed == 1 {
-			fmt.Println("removed 1 unused vendor")
+			logger.Infof("removed 1 unused vendor submodule")
 		} else {
-			fmt.Printf("removed %d unused vendors\n", removed)
+			logger.Infof("removed %d unused vendor submodules", removed)
 		}
 	} else {
-		fmt.Printf("nothing to remove\n")
+		logger.Infof("nothing to remove\n")
 	}
 
 	return nil

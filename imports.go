@@ -2,15 +2,16 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"sort"
 	"strings"
+
+	"github.com/reconquest/ser-go"
 )
 
-type listOutput struct {
+type golistOutput struct {
 	Imports     []string
 	Deps        []string
 	TestImports []string
@@ -20,14 +21,16 @@ func parseImports(recursive bool, testDependencies bool) ([]string, error) {
 	var imports []string
 	packages, err := listPackages()
 	if err != nil {
-		return imports, fmt.Errorf("error listing packages: %s", err)
+		return imports, ser.Errorf(
+			err, "unable to list packages",
+		)
 	}
 
 	// Ensuring our dependencies exists isn't a strict requirement, therefore
 	// only print a message to stderr rather then completely failing.
 	err = ensureDependenciesExist(packages, testDependencies)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
+		logger.Error(err)
 	}
 
 	imports, err = calculateDependencies(packages, recursive, testDependencies)
@@ -47,10 +50,11 @@ func calculateDependencies(packages []string, recursive,
 	var deps, imports, testImports, testDeps []string
 
 	for _, pkg := range packages {
-		data, err := list(pkg)
+		data, err := golist(pkg)
 		if err != nil {
-			return imports,
-				fmt.Errorf("failed to list dependencies for %s: %s", pkg, err)
+			return imports, ser.Errorf(
+				err, "unable to list dependecies for package: %s", pkg,
+			)
 		}
 
 		if recursive {
@@ -67,12 +71,14 @@ func calculateDependencies(packages []string, recursive,
 	testImports = unique(testImports)
 	if recursive {
 		for _, testImport := range testImports {
-			testData, err := list(testImport)
+			testData, err := golist(testImport)
 			if err != nil {
-				return imports, fmt.Errorf(
-					"failed to list dependencies for testing package %s: %s",
-					testImport, err)
+				return imports, ser.Errorf(
+					err, "unable to list dependencies for package: %s",
+					testImport,
+				)
 			}
+
 			testDeps = append(testDeps, testData.Deps...)
 		}
 
@@ -94,9 +100,10 @@ func filterPackages(packages []string) []string {
 			continue
 		}
 
-		if inTests {
-			importpath = strings.Replace(importpath,
-				"__blankd__", "localhost:60001", -1)
+		if testing {
+			importpath = strings.Replace(
+				importpath, "__blankd__", "localhost:60001", -1,
+			)
 		}
 
 		if isOwnPackage(importpath) {
@@ -133,16 +140,20 @@ func ensureDependenciesExist(packages []string, includeTestDeps bool) error {
 	}
 	args = append(args, packages...)
 
-	out, err := execute(exec.Command("go", args...))
+	_, err := execute(exec.Command("go", args...))
 	if err != nil {
-		return fmt.Errorf("can't 'go get' dependencies:\n%s", out)
+		return ser.Errorf(
+			err,
+			"unable to go get dependencies: %s",
+			strings.Join(packages, ", "),
+		)
 	}
 
 	return nil
 }
 
-func list(pkg string) (listOutput, error) {
-	data := listOutput{}
+func golist(pkg string) (golistOutput, error) {
+	data := golistOutput{}
 
 	out, err := execute(exec.Command("go", "list", "-e", "-json", pkg))
 	if err != nil {
@@ -151,8 +162,10 @@ func list(pkg string) (listOutput, error) {
 
 	err = json.Unmarshal([]byte(out), &data)
 	if err != nil {
-		return data,
-			fmt.Errorf("can't unmarshal go list JSON output: %s\n%q", err, out)
+		return data, ser.Push(
+			ser.Errorf(err, "unable to decode `go list` JSON output"),
+			out,
+		)
 	}
 
 	return data, nil
@@ -187,15 +200,17 @@ func isOwnPackage(path string) bool {
 }
 
 func unique(input []string) []string {
-	uniqueList := make([]string, 0, len(input))
-	uniqueMap := make(map[string]bool)
+	var (
+		list  = make([]string, 0, len(input))
+		table = make(map[string]bool)
+	)
 
-	for _, val := range input {
-		if _, ok := uniqueMap[val]; !ok {
-			uniqueMap[val] = true
-			uniqueList = append(uniqueList, val)
+	for _, value := range input {
+		if _, ok := table[value]; !ok {
+			table[value] = true
+			list = append(list, value)
 		}
 	}
 
-	return uniqueList
+	return list
 }
