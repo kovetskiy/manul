@@ -3,4 +3,6 @@ go:
  - 1.7
 
 script:
- - ./run_tests
+- git submodule update --init --recursive
+- go get
+- make test
