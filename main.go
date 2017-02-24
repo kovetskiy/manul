@@ -198,7 +198,7 @@ func handleInstall(recursive bool, includeTestDeps bool,
 		if added == 1 {
 			logger.Infof("added 1 submodule")
 		} else {
-			logger.Infof("added %d submodules\n", added)
+			logger.Infof("added %d submodules", added)
 		}
 	} else {
 		logger.Infof("all dependencies already vendored\n")
@@ -242,7 +242,7 @@ func handleUpdate(recursive bool, includeTestDeps bool,
 		if updated == 1 {
 			logger.Infof("updated 1 dependency submodule")
 		} else {
-			logger.Infof("updated %d dependencies submodules\n", updated)
+			logger.Infof("updated %d dependencies submodules", updated)
 		}
 	} else {
 		logger.Infof("nothing to update")
@@ -367,7 +367,7 @@ func handleClean(recursive, includeTestDeps bool) error {
 			logger.Infof("removed %d unused vendor submodules", removed)
 		}
 	} else {
-		logger.Infof("nothing to remove\n")
+		logger.Infof("nothing to remove")
 	}
 
 	return nil

@@ -1,3 +1,21 @@
 [submodule "vendor/github.com/reconquest/import.bash"]
 	path = vendor/github.com/reconquest/import.bash
 	url = https://github.com/reconquest/import.bash
+[submodule "vendor/github.com/PuerkitoBio/goquery"]
+	path = vendor/github.com/PuerkitoBio/goquery
+	url = https://github.com/PuerkitoBio/goquery
+[submodule "vendor/github.com/kovetskiy/godocs"]
+	path = vendor/github.com/kovetskiy/godocs
+	url = https://github.com/kovetskiy/godocs
+[submodule "vendor/github.com/kovetskiy/lorg"]
+	path = vendor/github.com/kovetskiy/lorg
+	url = https://github.com/kovetskiy/lorg
+[submodule "vendor/github.com/reconquest/hierr-go"]
+	path = vendor/github.com/reconquest/hierr-go
+	url = https://github.com/reconquest/hierr-go
+[submodule "vendor/github.com/reconquest/lexec-go"]
+	path = vendor/github.com/reconquest/lexec-go
+	url = https://github.com/reconquest/lexec-go
+[submodule "vendor/github.com/reconquest/ser-go"]
+	path = vendor/github.com/reconquest/ser-go
+	url = https://github.com/reconquest/ser-go
