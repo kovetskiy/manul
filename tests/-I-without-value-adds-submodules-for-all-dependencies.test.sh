@@ -14,9 +14,7 @@ func main() {
 GO
 
 tests:ensure :manul -I
-tests:assert-no-diff stdout <<VENDORS
-added 2 submodules
-VENDORS
 
+tests:assert-stderr "added 2 submodules"
 tests:assert-stderr "adding submodule for github.com/kovetskiy/manul-test-bar"
 tests:assert-stderr "adding submodule for github.com/kovetskiy/manul-test-foo"

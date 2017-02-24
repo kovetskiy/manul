@@ -134,10 +134,12 @@ func filterPackages(packages []string) []string {
 }
 
 func ensureDependenciesExist(packages []string, includeTestDeps bool) error {
-	args := []string{"get"}
+	args := []string{"get", "-d"} // -d for download only
+
 	if includeTestDeps {
 		args = append(args, "-t")
 	}
+
 	args = append(args, packages...)
 
 	_, err := execute(exec.Command("go", args...))
@@ -162,10 +164,7 @@ func golist(pkg string) (golistOutput, error) {
 
 	err = json.Unmarshal([]byte(out), &data)
 	if err != nil {
-		return data, ser.Push(
-			ser.Errorf(err, "unable to decode `go list` JSON output"),
-			out,
-		)
+		return data, ser.Errorf(err, "unable to decode `go list` JSON output")
 	}
 
 	return data, nil
