@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"go/build"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
@@ -171,15 +170,10 @@ func removeVendorSubmodule(importpath string) error {
 }
 
 func updateVendorSubmodule(importpath string) error {
-	cwd, err := os.Getwd()
-	if err != nil {
-		return err
-	}
-
 	cmd := exec.Command("git", "pull", "origin", "master")
-	cmd.Dir = filepath.Join(cwd, "vendor", importpath)
+	cmd.Dir = filepath.Join(workdir, "vendor", importpath)
 
-	_, err = execute(cmd)
+	_, err := execute(cmd)
 
 	return err
 }
@@ -190,6 +184,8 @@ func getRootImportpath(importpath string) (string, error) {
 		return "", err
 	}
 
+	vendorPath := strings.TrimPrefix(workdir, pkg.SrcRoot+"/") + "/vendor/"
+
 	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
 	cmd.Dir = filepath.Join(pkg.SrcRoot, importpath)
 
@@ -198,8 +194,7 @@ func getRootImportpath(importpath string) (string, error) {
 		return "", err
 	}
 
-	return strings.Trim(
+	return strings.TrimPrefix(strings.Trim(
 		strings.TrimSpace(strings.TrimPrefix(rootdir, pkg.SrcRoot)),
-		"/",
-	), nil
+		"/"), vendorPath), nil
 }

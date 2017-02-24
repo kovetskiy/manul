@@ -16,8 +16,8 @@ func execute(cmd *exec.Cmd) (string, error) {
 		}
 	}
 
-	stdout, _, err := executil.Run(cmd)
-	return string(stdout), err
+	stdout, stderr, err := executil.Run(cmd)
+	return string(stdout) + string(stderr), err
 }
 
 func getMaxLength(elements []string) int {
