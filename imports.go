@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"go/build"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -95,7 +96,17 @@ func filterPackages(packages []string) []string {
 	var imports []string
 
 	for _, importing := range packages {
-		importpath, err := getRootImportpath(importing)
+		pkg, err := build.Import(importing, "", build.IgnoreVendor)
+		if err != nil {
+			continue
+		}
+
+		// must skip packages in GOROOT dirs
+		if pkg.Goroot {
+			continue
+		}
+
+		importpath, err := getRootImportpath(pkg, importing)
 		if err != nil {
 			continue
 		}

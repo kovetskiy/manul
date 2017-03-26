@@ -191,14 +191,7 @@ func updateVendorSubmodule(importpath string) error {
 	return err
 }
 
-func getRootImportpath(importpath string) (string, error) {
-	pkg, err := build.Import(importpath, "", build.IgnoreVendor)
-	if err != nil {
-		return "", err
-	}
-
-	vendorPath := strings.TrimPrefix(workdir, pkg.SrcRoot+"/") + "/vendor/"
-
+func getRootImportpath(pkg *build.Package, importpath string) (string, error) {
 	cmd := exec.Command(
 		"git",
 		"-C", filepath.Join(pkg.SrcRoot, importpath),
@@ -209,6 +202,8 @@ func getRootImportpath(importpath string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	vendorPath := strings.TrimPrefix(workdir, pkg.SrcRoot+"/") + "/vendor/"
 
 	return strings.TrimPrefix(
 		strings.Trim(
