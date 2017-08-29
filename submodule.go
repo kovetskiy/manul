@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	"go/build"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/reconquest/ser-go"
 )
 
 const tagMetaGoImport = "meta[name=go-import]"
@@ -21,7 +21,7 @@ var wellKnownSites = []string{
 	"hub.jazz.net/git/",
 	"git.apache.org/",
 	"git.openstack.org/",
-	"beanstalkapp.com/"
+	"beanstalkapp.com/",
 }
 
 func getVendorSubmodules() (map[string]string, error) {
@@ -59,9 +59,9 @@ func getVendorSubmodules() (map[string]string, error) {
 func addVendorSubmodule(importpath string) []error {
 	var (
 		target   = "vendor/" + importpath
-		gopath = os.Getenv("GOPATH")
+		gopath   = os.Getenv("GOPATH")
 		prefixes = []string{
-			fmt.Sprintf("file://%s/src/",gopath), // Tries to take the dependency from the local GOPATH
+			fmt.Sprintf("file://%s/src/", gopath), // Tries to take the dependency from the local GOPATH
 			"https://",
 			"git+ssh://",
 			"git://",
