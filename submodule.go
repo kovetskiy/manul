@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	ser "github.com/reconquest/ser-go"
 )
 
 const tagMetaGoImport = "meta[name=go-import]"
@@ -29,9 +30,7 @@ func getVendorSubmodules() (map[string]string, error) {
 		exec.Command("git", "submodule", "status"),
 	)
 	if err != nil {
-		return nil, ser.Errorf(
-			err, "unable to get submodules status",
-		)
+		return nil, err
 	}
 
 	vendors := map[string]string{}
@@ -58,16 +57,17 @@ func getVendorSubmodules() (map[string]string, error) {
 
 func addVendorSubmodule(importpath string) []error {
 	var (
-		target   = "vendor/" + importpath
-		gopath   = os.Getenv("GOPATH")
+		target  = "vendor/" + importpath
+		gopath  = os.Getenv("GOPATH")
+		fileUrl = fmt.Sprintf("file://%s/src/", gopath)
+
 		prefixes = []string{
-			fmt.Sprintf("file://%s/src/", gopath), // Tries to take the dependency from the local GOPATH
+			fileUrl, // Tries to take the dependency from the local GOPATH
 			"https://",
 			"git+ssh://",
 			"git://",
 		}
-
-		errs []error
+		errs = make([]error, 0)
 	)
 
 	for _, prefix := range prefixes {
