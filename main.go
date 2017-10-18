@@ -33,9 +33,13 @@ Options:
     -I --install    Detect all dependencies and add git submodule into vendor directory.
                      If you don't specify any dependency, manul will
                      install all detected dependencies.
+                     You can specify commit-ish that will be used as target to
+                     update: -U golang.org/x/net=34a235h1
     -U --update     Update specified already-vendored dependencies.
                      If you don't specify any vendored dependency, manul will
                      update all already-vendored dependencies.
+                     You can specify commit-ish that will be used as target to
+                     update: -U golang.org/x/net=34a235h1
     -R --remove     Stop vendoring of specified dependencies.
                      If you don't specify any dependency, manul will
                      remove all vendored dependencies.
@@ -152,6 +156,16 @@ func handleInstall(recursive bool, includeTestDeps bool,
 
 	added := 0
 	for _, dependency := range dependencies {
+		parts := strings.Split(dependency, "=")
+		if len(parts) > 2 {
+			return fmt.Errorf("too many `=` delimiters: %s", dependency)
+		}
+
+		var version string
+		if len(parts) == 2 {
+			dependency, version = parts[0], parts[1]
+		}
+
 		if !installAll {
 			found := false
 			for _, importpath := range imports {
@@ -182,7 +196,7 @@ func handleInstall(recursive bool, includeTestDeps bool,
 
 		logger.Infof("adding submodule for %s", dependency)
 
-		errs := addVendorSubmodule(dependency)
+		errs := addVendorSubmodule(dependency, version)
 		if errs != nil {
 			top := fmt.Errorf("unable to add submodule for %s", dependency)
 			for _, err := range errs {
@@ -207,8 +221,11 @@ func handleInstall(recursive bool, includeTestDeps bool,
 	return nil
 }
 
-func handleUpdate(recursive bool, includeTestDeps bool,
-	dependencies []string) error {
+func handleUpdate(
+	recursive bool,
+	includeTestDeps bool,
+	dependencies []string,
+) error {
 	var err error
 	if len(dependencies) == 0 {
 		dependencies, err = parseImports(recursive, includeTestDeps)
@@ -224,13 +241,28 @@ func handleUpdate(recursive bool, includeTestDeps bool,
 
 	updated := 0
 	for _, importpath := range dependencies {
+		parts := strings.Split(importpath, "=")
+		if len(parts) > 2 {
+			return fmt.Errorf("too many `=` delimiters: %s", importpath)
+		}
+
+		var version string
+		if len(parts) == 2 {
+			importpath = parts[0]
+			version = parts[1]
+		}
+
 		if _, ok := submodules[importpath]; !ok {
 			return fmt.Errorf("unknown dependency %s", importpath)
 		}
 
-		logger.Infof("updating vendor submodule %s", importpath)
+		if version != "" {
+			logger.Infof("updating vendor submodule %s to %s", importpath, version)
+		} else {
+			logger.Infof("updating vendor submodule %s", importpath)
+		}
 
-		err := updateVendorSubmodule(importpath)
+		err := updateVendorSubmodule(importpath, version)
 		if err != nil {
 			return err
 		}

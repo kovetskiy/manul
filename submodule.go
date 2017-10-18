@@ -55,7 +55,7 @@ func getVendorSubmodules() (map[string]string, error) {
 	return vendors, nil
 }
 
-func addVendorSubmodule(importpath string) []error {
+func addVendorSubmodule(importpath string, version string) []error {
 	var (
 		target   = "vendor/" + importpath
 		prefixes = []string{
@@ -84,6 +84,15 @@ func addVendorSubmodule(importpath string) []error {
 			exec.Command("git", "submodule", "add", "-f", url, target),
 		)
 		if err == nil {
+			if version != "" {
+				_, err = execute(
+					exec.Command("git", "-C", target, "checkout", version),
+				)
+				if err != nil {
+					return []error{err}
+				}
+			}
+
 			return nil
 		}
 
@@ -180,14 +189,27 @@ func removeVendorSubmodule(importpath string) error {
 	return nil
 }
 
-func updateVendorSubmodule(importpath string) error {
-	cmd := exec.Command(
-		"git",
-		"-C", filepath.Join(workdir, "vendor", importpath),
-		"pull", "origin", "master",
-	)
+func updateVendorSubmodule(importpath string, version string) error {
+	cwd := filepath.Join(workdir, "vendor", importpath)
+	if version == "" {
+		cmd := exec.Command(
+			"git", "-C", cwd, "pull", "origin", "master")
 
-	_, err := execute(cmd)
+		_, err := execute(cmd)
+		return err
+	}
+
+	_, err := execute(exec.Command("git", "-C", cwd, "show", version))
+	if err != nil {
+		_, err := execute(exec.Command("git", "-C", cwd, "remote", "update"))
+		if err != nil {
+			return err
+		}
+	}
+
+	_, err = execute(
+		exec.Command("git", "-C", cwd, "checkout", version),
+	)
 	return err
 }
 

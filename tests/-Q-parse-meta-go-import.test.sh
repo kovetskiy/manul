@@ -22,16 +22,15 @@ SRV
 tests:ensure chmod +x $(tests:get-tmp-dir)/server
 
 
-:lib "github.com/kovetskiy/blankd"
 :lib "github.com/kovetskiy/manul-test-foo"
 tests:ensure  mv \
     $(tests:get-tmp-dir)/go/src/github.com \
     $(tests:get-tmp-dir)/go/src/__blankd__
 
-tests:ensure $(tests:get-tmp-dir)/go/bin/blankd \
+tests:ensure blankd \
     -l localhost:60001 \
     -e $(tests:get-tmp-dir)/server \
-    -o $(tests:get-tmp-dir)/blankd.log \
+    -o /tmp/blankd.log \
     --tls
 tests:value _process cat $(tests:get-stdout-file)
 :stop_blankd() {

@@ -19,3 +19,6 @@
 [submodule "vendor/github.com/reconquest/ser-go"]
 	path = vendor/github.com/reconquest/ser-go
 	url = https://github.com/reconquest/ser-go
+[submodule "vendor/github.com/reconquest/executil-go"]
+	path = vendor/github.com/reconquest/executil-go
+	url = https://github.com/reconquest/executil-go
