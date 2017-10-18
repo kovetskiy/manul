@@ -34,7 +34,7 @@ Options:
                      If you don't specify any dependency, manul will
                      install all detected dependencies.
                      You can specify commit-ish that will be used as target to
-                     update: -U golang.org/x/net=34a235h1
+                     instal: -I golang.org/x/net=34a235h1
     -U --update     Update specified already-vendored dependencies.
                      If you don't specify any vendored dependency, manul will
                      update all already-vendored dependencies.
