@@ -101,6 +101,10 @@ By the way, manul can detect and remove unused vendored dependencies using `-C`
 
 ![unused dependencies](https://cloud.githubusercontent.com/assets/8445924/10285731/ae1d0270-6b79-11e5-9e97-151b7d77402a.gif)
 
+**manul** can also get you a specific version of a dependency by using a commit-ish, for example:
+- `manul -I golang.org/x/foo=34a235h1` will install `foo` at the specified commit
+- `manul -U github.com/x/bar=this-tag` will update it to `this-tag` version.
+
 Let's summarize:
 
 - `-I [<dependency>...]` - install git submodules for specified/all dependencies;
