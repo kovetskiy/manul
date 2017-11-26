@@ -3,6 +3,7 @@ go:
  - 1.7
 
 script:
+- go get -u -v github.com/kovetskiy/blankd
 - git submodule update --init --recursive
 - go get
 - make test
