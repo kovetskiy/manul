@@ -4,6 +4,19 @@
 
 Manul is a vendoring utility for Go programs.
 
+## Installation
+
+**manul** can be obtained using `go get`:
+
+```
+go get github.com/kovetskiy/manul
+```
+
+Packages are also available for [Ubuntu/Debian][pkg-debian] and [Arch Linux][pkg-archlinux].
+
+[pkg-debian]: https://github.com/kovetskiy/manul/tree/pkg-debian#readme
+[pkg-archlinux]: https://github.com/kovetskiy/manul/tree/pkg-archlinux#readme
+
 ## What's the reason for yet another utility?
 
 Because all other vendor utilities suffer from the following:
@@ -114,34 +127,3 @@ Let's summarize:
 - `-C` - detect and remove all git submodules for unused vendored dependencies.
 
 You can see similar help message by passing `-h` or `--help` flag.
-
-## Installation
-
-#### Ubuntu/Debian:
-
-```bash
-git clone --branch pkg-debian git://github.com/kovetskiy/manul /tmp/manul
-cd /tmp/manul
-./build.sh
-dpkg -i *.deb
-```
-
-#### Arch Linux:
-
-Install [manul](https://aur.archlinux.org/packages/manul) from AUR, or build the package manually:
-
-
-```bash
-git clone --branch pkg-archlinux git://github.com/kovetskiy/manul /tmp/manul
-cd /tmp/manul
-makepkg
-pacman -U *.xz
-```
-
-#### Other distros
-
-**manul** can be obtained using `go get`:
-
-```
-go get github.com/kovetskiy/manul
-```
