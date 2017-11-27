@@ -1,3 +1,7 @@
+branches:
+  except:
+  - /^pkg-/
+
 language: go
 go:
  - 1.7
