@@ -145,6 +145,11 @@ func filterPackages(packages []string) []string {
 }
 
 func ensureDependenciesExist(packages []string, includeTestDeps bool) error {
+	packages = filterPackages(packages)
+	if len(packages) <= 0 {
+		return nil
+	}
+
 	args := []string{"get", "-d"} // -d for download only
 
 	if includeTestDeps {
