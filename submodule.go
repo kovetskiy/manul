@@ -3,12 +3,13 @@ package main
 import (
 	"fmt"
 	"go/build"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/reconquest/ser-go"
+	ser "github.com/reconquest/ser-go"
 )
 
 const tagMetaGoImport = "meta[name=go-import]"
@@ -21,6 +22,7 @@ var wellKnownSites = []string{
 	"hub.jazz.net/git/",
 	"git.apache.org/",
 	"git.openstack.org/",
+	"beanstalkapp.com/",
 }
 
 func getVendorSubmodules() (map[string]string, error) {
@@ -28,9 +30,7 @@ func getVendorSubmodules() (map[string]string, error) {
 		exec.Command("git", "submodule", "status"),
 	)
 	if err != nil {
-		return nil, ser.Errorf(
-			err, "unable to get submodules status",
-		)
+		return nil, err
 	}
 
 	vendors := map[string]string{}
@@ -57,14 +57,17 @@ func getVendorSubmodules() (map[string]string, error) {
 
 func addVendorSubmodule(importpath string, version string) []error {
 	var (
-		target   = "vendor/" + importpath
+		target  = "vendor/" + importpath
+		gopath  = os.Getenv("GOPATH")
+		fileUrl = fmt.Sprintf("file://%s/src/", gopath)
+
 		prefixes = []string{
+			fileUrl, // Tries to take the dependency from the local GOPATH
 			"https://",
 			"git+ssh://",
 			"git://",
 		}
-
-		errs []error
+		errs = make([]error, 0)
 	)
 
 	for _, prefix := range prefixes {
