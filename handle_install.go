@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/reconquest/ser-go"
+	"github.com/reconquest/karma-go"
 )
 
 func handleInstall(recursive bool, withTests bool,
@@ -70,7 +70,7 @@ func handleInstall(recursive bool, withTests bool,
 		if errs != nil {
 			top := fmt.Errorf("unable to add submodule for %s", dependency)
 			for _, err := range errs {
-				top = ser.Push(top, err)
+				top = karma.Push(top, err)
 			}
 			return top
 		}
