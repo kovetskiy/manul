@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/reconquest/ser-go"
+	"github.com/reconquest/karma-go"
 )
 
 const tagMetaGoImport = "meta[name=go-import]"
@@ -28,7 +28,7 @@ func getVendorSubmodules() (map[string]string, error) {
 		exec.Command("git", "submodule", "status"),
 	)
 	if err != nil {
-		return nil, ser.Errorf(
+		return nil, karma.Format(
 			err, "unable to get submodules status",
 		)
 	}
@@ -163,7 +163,7 @@ func removeVendorSubmodule(importpath string) error {
 		exec.Command("git", "submodule", "deinit", "-f", vendor),
 	)
 	if err != nil {
-		return ser.Errorf(
+		return karma.Format(
 			err, "unable to deinit vendor submodule: %s", vendor,
 		)
 	}
@@ -172,7 +172,7 @@ func removeVendorSubmodule(importpath string) error {
 		exec.Command("git", "rm", "--force", vendor),
 	)
 	if err != nil {
-		return ser.Errorf(
+		return karma.Format(
 			err, "unable to remove vendor directory: %s", vendor,
 		)
 	}
@@ -181,7 +181,7 @@ func removeVendorSubmodule(importpath string) error {
 		exec.Command("rm", "-r", filepath.Join(".git", "modules", vendor)),
 	)
 	if err != nil {
-		return ser.Errorf(
+		return karma.Format(
 			err, "unable to remove .git/modules/%s directory", vendor,
 		)
 	}

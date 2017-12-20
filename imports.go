@@ -9,7 +9,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/reconquest/ser-go"
+	"github.com/reconquest/karma-go"
 )
 
 type golistOutput struct {
@@ -22,7 +22,7 @@ func parseImports(recursive bool, testDependencies bool) ([]string, error) {
 	var imports []string
 	packages, err := listPackages()
 	if err != nil {
-		return imports, ser.Errorf(
+		return imports, karma.Format(
 			err, "unable to list packages",
 		)
 	}
@@ -53,7 +53,7 @@ func calculateDependencies(packages []string, recursive,
 	for _, pkg := range packages {
 		data, err := golist(pkg)
 		if err != nil {
-			return imports, ser.Errorf(
+			return imports, karma.Format(
 				err, "unable to list dependecies for package: %s", pkg,
 			)
 		}
@@ -74,7 +74,7 @@ func calculateDependencies(packages []string, recursive,
 		for _, testImport := range testImports {
 			testData, err := golist(testImport)
 			if err != nil {
-				return imports, ser.Errorf(
+				return imports, karma.Format(
 					err, "unable to list dependencies for package: %s",
 					testImport,
 				)
@@ -155,7 +155,7 @@ func ensureDependenciesExist(packages []string, includeTestDeps bool) error {
 
 	_, err := execute(exec.Command("go", args...))
 	if err != nil {
-		return ser.Errorf(
+		return karma.Format(
 			err,
 			"unable to go get dependencies: %s",
 			strings.Join(packages, ", "),
@@ -175,7 +175,7 @@ func golist(pkg string) (golistOutput, error) {
 
 	err = json.Unmarshal([]byte(out), &data)
 	if err != nil {
-		return data, ser.Errorf(err, "unable to decode `go list` JSON output")
+		return data, karma.Format(err, "unable to decode `go list` JSON output")
 	}
 
 	return data, nil

@@ -1,6 +1,6 @@
 package main
 
-import "github.com/reconquest/ser-go"
+import "github.com/reconquest/karma-go"
 
 func handleClean(recursive, includeTestDeps bool) error {
 	imports, err := parseImports(recursive, includeTestDeps)
@@ -31,7 +31,7 @@ func handleClean(recursive, includeTestDeps bool) error {
 
 		err := removeVendorSubmodule(submodule)
 		if err != nil {
-			return ser.Errorf(
+			return karma.Format(
 				err, "unable to remove vendor submodule: %s", submodule,
 			)
 		}
