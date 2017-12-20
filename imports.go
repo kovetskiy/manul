@@ -39,15 +39,18 @@ func parseImports(recursive bool, testDependencies bool) ([]string, error) {
 		return imports, err
 	}
 
-	imports = filterPackages(imports)
+	imports = filterPackages(imports, build.IgnoreVendor)
 
 	sort.Strings(imports)
 
 	return imports, nil
 }
 
-func calculateDependencies(packages []string, recursive,
-	testDependencies bool) ([]string, error) {
+func calculateDependencies(
+	packages []string,
+	recursive,
+	testDependencies bool,
+) ([]string, error) {
 	var deps, imports, testImports, testDeps []string
 
 	for _, pkg := range packages {
@@ -92,11 +95,15 @@ func calculateDependencies(packages []string, recursive,
 	return deps, nil
 }
 
-func filterPackages(packages []string) []string {
+func filterPackages(packages []string, mode build.ImportMode) []string {
 	var imports []string
 
 	for _, importing := range packages {
-		pkg, err := build.Import(importing, "", build.IgnoreVendor)
+		if importing == "C" {
+			continue
+		}
+
+		pkg, err := build.Import(importing, "", mode)
 		if err != nil {
 			continue
 		}

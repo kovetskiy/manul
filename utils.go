@@ -7,7 +7,11 @@ import (
 )
 
 func execute(cmd *exec.Cmd) (string, error) {
-	execution := lexec.NewExec(lexec.Loggerf(logger.Debugf), cmd)
+	if verbose {
+		logger.Debugf("%s", cmd.Args)
+	}
+
+	execution := lexec.NewExec(lexec.Loggerf(logger.Tracef), cmd)
 	stdout, stderr, err := execution.Output()
 	return string(stdout) + string(stderr), err
 }

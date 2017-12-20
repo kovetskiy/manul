@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	version = `manul 1.5`
+	version = `manul 1.6`
 	usage   = version + `
 
 manul is the tool for vendoring dependencies using git submodule technology.
@@ -22,6 +22,7 @@ Usage:
     manul [options] -R [<dependency>...]
     manul [options] -Q [-o]
     manul [options] -C
+    manul [options] -T
     manul -h
     manul --version
 
@@ -42,16 +43,19 @@ Options:
     -Q --query      List all dependencies.
         -o          List only already-vendored dependencies.
     -C --clean      Detect all unused vendored dependencies and remove it.
+    -T --tree       Show dependencies tree.
     -t --testing    Include dependencies from tests.
     -r --recursive  Be recursive.
     -h --help       Show help message.
     -v --verbose    Be verbose.
+    --trace         Be very verbose.
     --version       Show version.
 `
 )
 
 var (
 	verbose bool
+	tracing bool
 	testing bool
 	workdir string
 	logger  = lorg.NewLog()
@@ -97,11 +101,19 @@ func main() {
 	)
 
 	if args["--verbose"].(bool) {
+		verbose = true
 		logger.SetLevel(lorg.LevelDebug)
+	}
+
+	if args["--trace"].(bool) {
+		logger.SetLevel(lorg.LevelTrace)
 	}
 
 	var err error
 	switch {
+	case args["--tree"].(bool):
+		err = handleTree(withTests)
+
 	case args["--install"].(bool):
 		err = handleInstall(recursive, withTests, dependencies)
 
