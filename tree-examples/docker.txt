@@ -1,0 +1,1399 @@
+github.com/docker/docker/api
+github.com/docker/docker/api/errdefs
+github.com/docker/docker/api/server
+├─ github.com/gorilla/mux
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/net
+github.com/docker/docker/api/server/backend/build
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/pkg/errors
+│
+└─ golang.org/x/net
+github.com/docker/docker/api/server/httputils
+├─ github.com/gorilla/mux
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+├─ golang.org/x/net
+│
+└─ google.golang.org/grpc
+   ├─ github.com/golang/protobuf
+   └─ golang.org/x/net
+github.com/docker/docker/api/server/middleware
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/net
+github.com/docker/docker/api/server/router
+└─ golang.org/x/net
+github.com/docker/docker/api/server/router/build
+├─ github.com/docker/go-units
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/net
+github.com/docker/docker/api/server/router/checkpoint
+└─ golang.org/x/net
+github.com/docker/docker/api/server/router/container
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/net
+github.com/docker/docker/api/server/router/debug
+└─ golang.org/x/net
+github.com/docker/docker/api/server/router/distribution
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/opencontainers/image-spec
+│
+├─ github.com/pkg/errors
+│
+└─ golang.org/x/net
+github.com/docker/docker/api/server/router/image
+├─ github.com/opencontainers/image-spec
+├─ github.com/pkg/errors
+└─ golang.org/x/net
+github.com/docker/docker/api/server/router/network
+├─ github.com/docker/libnetwork
+│  ├─ github.com/gogo/protobuf
+│  │
+│  ├─ github.com/miekg/dns
+│  │
+│  ├─ github.com/opencontainers/runc
+│  │  ├─ github.com/coreos/go-systemd
+│  │  │
+│  │  ├─ github.com/docker/go-units
+│  │  │
+│  │  ├─ github.com/opencontainers/runtime-spec
+│  │  │
+│  │  ├─ github.com/sirupsen/logrus
+│  │  │  ├─ golang.org/x/crypto
+│  │  │  └─ golang.org/x/sys
+│  │  │
+│  │  ├─ github.com/urfave/cli
+│  │  │
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/vishvananda/netlink
+│  │  └─ github.com/vishvananda/netns
+│  │
+│  └─ github.com/vishvananda/netns
+│
+├─ github.com/pkg/errors
+│
+└─ golang.org/x/net
+github.com/docker/docker/api/server/router/plugin
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/pkg/errors
+│
+└─ golang.org/x/net
+github.com/docker/docker/api/server/router/session
+└─ golang.org/x/net
+github.com/docker/docker/api/server/router/swarm
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/net
+github.com/docker/docker/api/server/router/system
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/net
+github.com/docker/docker/api/server/router/volume
+└─ golang.org/x/net
+github.com/docker/docker/api/types
+├─ github.com/docker/go-connections
+└─ github.com/docker/go-units
+github.com/docker/docker/api/types/backend
+github.com/docker/docker/api/types/blkiodev
+github.com/docker/docker/api/types/container
+├─ github.com/docker/go-connections
+└─ github.com/docker/go-units
+github.com/docker/docker/api/types/events
+github.com/docker/docker/api/types/filters
+github.com/docker/docker/api/types/image
+github.com/docker/docker/api/types/mount
+github.com/docker/docker/api/types/network
+github.com/docker/docker/api/types/plugins/logdriver
+└─ github.com/gogo/protobuf
+github.com/docker/docker/api/types/registry
+└─ github.com/opencontainers/image-spec
+github.com/docker/docker/api/types/strslice
+github.com/docker/docker/api/types/swarm
+github.com/docker/docker/api/types/swarm/runtime
+└─ github.com/gogo/protobuf
+github.com/docker/docker/api/types/time
+github.com/docker/docker/api/types/versions
+github.com/docker/docker/api/types/versions/v1p19
+└─ github.com/docker/go-connections
+github.com/docker/docker/api/types/versions/v1p20
+└─ github.com/docker/go-connections
+github.com/docker/docker/api/types/volume
+github.com/docker/docker/builder
+└─ golang.org/x/net
+github.com/docker/docker/builder/dockerfile
+├─ github.com/docker/go-connections
+│
+├─ github.com/opencontainers/runc
+│  ├─ github.com/coreos/go-systemd
+│  │
+│  ├─ github.com/docker/go-units
+│  │
+│  ├─ github.com/opencontainers/runtime-spec
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/urfave/cli
+│  │
+│  └─ golang.org/x/sys
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/net
+github.com/docker/docker/builder/dockerfile/command
+github.com/docker/docker/builder/dockerfile/instructions
+└─ github.com/pkg/errors
+github.com/docker/docker/builder/dockerfile/parser
+└─ github.com/pkg/errors
+github.com/docker/docker/builder/dockerfile/parser/dumper
+github.com/docker/docker/builder/dockerignore
+github.com/docker/docker/builder/fscache
+├─ github.com/boltdb/bolt
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/net
+github.com/docker/docker/builder/remotecontext
+├─ github.com/gogo/protobuf
+│
+├─ github.com/hashicorp/go-immutable-radix
+│  └─ github.com/hashicorp/golang-lru
+│
+├─ github.com/opencontainers/go-digest
+│
+├─ github.com/pkg/errors
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/builder/remotecontext/git
+└─ github.com/pkg/errors
+github.com/docker/docker/cli
+├─ github.com/pkg/errors
+│
+└─ github.com/spf13/cobra
+   └─ github.com/spf13/pflag
+github.com/docker/docker/cli/config
+github.com/docker/docker/cli/debug
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/client
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/docker/go-connections
+│
+├─ github.com/opencontainers/go-digest
+│
+├─ github.com/pkg/errors
+│
+└─ golang.org/x/net
+github.com/docker/docker/cmd/dockerd
+├─ github.com/coreos/go-systemd
+│
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/docker/go-connections
+│
+├─ github.com/docker/go-units
+│
+├─ github.com/docker/libnetwork
+│  ├─ github.com/gogo/protobuf
+│  │
+│  ├─ github.com/miekg/dns
+│  │
+│  ├─ github.com/opencontainers/runc
+│  │  ├─ github.com/coreos/go-systemd
+│  │  │
+│  │  ├─ github.com/docker/go-units
+│  │  │
+│  │  ├─ github.com/opencontainers/runtime-spec
+│  │  │
+│  │  ├─ github.com/sirupsen/logrus
+│  │  │  ├─ golang.org/x/crypto
+│  │  │  └─ golang.org/x/sys
+│  │  │
+│  │  ├─ github.com/urfave/cli
+│  │  │
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/vishvananda/netlink
+│  │  └─ github.com/vishvananda/netns
+│  │
+│  └─ github.com/vishvananda/netns
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+├─ github.com/spf13/cobra
+│  └─ github.com/spf13/pflag
+│
+├─ github.com/spf13/pflag
+│
+└─ golang.org/x/sys
+github.com/docker/docker/cmd/dockerd/hack
+github.com/docker/docker/container
+├─ github.com/docker/go-connections
+│
+├─ github.com/docker/go-units
+│
+├─ github.com/docker/libnetwork
+│  ├─ github.com/gogo/protobuf
+│  │
+│  ├─ github.com/miekg/dns
+│  │
+│  ├─ github.com/opencontainers/runc
+│  │  ├─ github.com/coreos/go-systemd
+│  │  │
+│  │  ├─ github.com/docker/go-units
+│  │  │
+│  │  ├─ github.com/opencontainers/runtime-spec
+│  │  │
+│  │  ├─ github.com/sirupsen/logrus
+│  │  │  ├─ golang.org/x/crypto
+│  │  │  └─ golang.org/x/sys
+│  │  │
+│  │  ├─ github.com/urfave/cli
+│  │  │
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/vishvananda/netlink
+│  │  └─ github.com/vishvananda/netns
+│  │
+│  └─ github.com/vishvananda/netns
+│
+├─ github.com/opencontainers/selinux
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+├─ golang.org/x/net
+│
+└─ golang.org/x/sys
+github.com/docker/docker/container/stream
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/net
+github.com/docker/docker/contrib/apparmor
+github.com/docker/docker/contrib/docker-device-tool
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/contrib/httpserver
+github.com/docker/docker/daemon
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/docker/go-connections
+│
+├─ github.com/docker/libnetwork
+│  ├─ github.com/gogo/protobuf
+│  │
+│  ├─ github.com/miekg/dns
+│  │
+│  ├─ github.com/opencontainers/runc
+│  │  ├─ github.com/coreos/go-systemd
+│  │  │
+│  │  ├─ github.com/docker/go-units
+│  │  │
+│  │  ├─ github.com/opencontainers/runtime-spec
+│  │  │
+│  │  ├─ github.com/sirupsen/logrus
+│  │  │  ├─ golang.org/x/crypto
+│  │  │  └─ golang.org/x/sys
+│  │  │
+│  │  ├─ github.com/urfave/cli
+│  │  │
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/vishvananda/netlink
+│  │  └─ github.com/vishvananda/netns
+│  │
+│  └─ github.com/vishvananda/netns
+│
+├─ github.com/docker/libtrust
+│
+├─ github.com/gogo/protobuf
+│
+├─ github.com/opencontainers/go-digest
+│
+├─ github.com/opencontainers/runc
+│  ├─ github.com/coreos/go-systemd
+│  │
+│  ├─ github.com/docker/go-units
+│  │
+│  ├─ github.com/opencontainers/runtime-spec
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/urfave/cli
+│  │
+│  └─ golang.org/x/sys
+│
+├─ github.com/opencontainers/runtime-spec
+│
+├─ github.com/opencontainers/selinux
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/prometheus/client_golang
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+├─ github.com/vishvananda/netlink
+│  └─ github.com/vishvananda/netns
+│
+├─ golang.org/x/net
+│
+├─ golang.org/x/sys
+│
+└─ google.golang.org/grpc
+   ├─ github.com/golang/protobuf
+   └─ golang.org/x/net
+github.com/docker/docker/daemon/caps
+└─ github.com/syndtr/gocapability
+github.com/docker/docker/daemon/cluster
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/docker/libnetwork
+│  ├─ github.com/gogo/protobuf
+│  │
+│  ├─ github.com/miekg/dns
+│  │
+│  ├─ github.com/opencontainers/runc
+│  │  ├─ github.com/coreos/go-systemd
+│  │  │
+│  │  ├─ github.com/docker/go-units
+│  │  │
+│  │  ├─ github.com/opencontainers/runtime-spec
+│  │  │
+│  │  ├─ github.com/sirupsen/logrus
+│  │  │  ├─ golang.org/x/crypto
+│  │  │  └─ golang.org/x/sys
+│  │  │
+│  │  ├─ github.com/urfave/cli
+│  │  │
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/vishvananda/netlink
+│  │  └─ github.com/vishvananda/netns
+│  │
+│  └─ github.com/vishvananda/netns
+│
+├─ github.com/gogo/protobuf
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+├─ github.com/vishvananda/netlink
+│  └─ github.com/vishvananda/netns
+│
+├─ golang.org/x/net
+│
+└─ google.golang.org/grpc
+   ├─ github.com/golang/protobuf
+   └─ golang.org/x/net
+github.com/docker/docker/daemon/cluster/controllers/plugin
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/gogo/protobuf
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/net
+github.com/docker/docker/daemon/cluster/convert
+├─ github.com/docker/libnetwork
+│  ├─ github.com/gogo/protobuf
+│  │
+│  ├─ github.com/miekg/dns
+│  │
+│  ├─ github.com/opencontainers/runc
+│  │  ├─ github.com/coreos/go-systemd
+│  │  │
+│  │  ├─ github.com/docker/go-units
+│  │  │
+│  │  ├─ github.com/opencontainers/runtime-spec
+│  │  │
+│  │  ├─ github.com/sirupsen/logrus
+│  │  │  ├─ golang.org/x/crypto
+│  │  │  └─ golang.org/x/sys
+│  │  │
+│  │  ├─ github.com/urfave/cli
+│  │  │
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/vishvananda/netlink
+│  │  └─ github.com/vishvananda/netns
+│  │
+│  └─ github.com/vishvananda/netns
+│
+├─ github.com/gogo/protobuf
+│
+├─ github.com/pkg/errors
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/daemon/cluster/executor
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/docker/libnetwork
+│  ├─ github.com/gogo/protobuf
+│  │
+│  ├─ github.com/miekg/dns
+│  │
+│  ├─ github.com/opencontainers/runc
+│  │  ├─ github.com/coreos/go-systemd
+│  │  │
+│  │  ├─ github.com/docker/go-units
+│  │  │
+│  │  ├─ github.com/opencontainers/runtime-spec
+│  │  │
+│  │  ├─ github.com/sirupsen/logrus
+│  │  │  ├─ golang.org/x/crypto
+│  │  │  └─ golang.org/x/sys
+│  │  │
+│  │  ├─ github.com/urfave/cli
+│  │  │
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/vishvananda/netlink
+│  │  └─ github.com/vishvananda/netns
+│  │
+│  └─ github.com/vishvananda/netns
+│
+└─ golang.org/x/net
+github.com/docker/docker/daemon/cluster/executor/container
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/docker/go-connections
+│
+├─ github.com/docker/libnetwork
+│  ├─ github.com/gogo/protobuf
+│  │
+│  ├─ github.com/miekg/dns
+│  │
+│  ├─ github.com/opencontainers/runc
+│  │  ├─ github.com/coreos/go-systemd
+│  │  │
+│  │  ├─ github.com/docker/go-units
+│  │  │
+│  │  ├─ github.com/opencontainers/runtime-spec
+│  │  │
+│  │  ├─ github.com/sirupsen/logrus
+│  │  │  ├─ golang.org/x/crypto
+│  │  │  └─ golang.org/x/sys
+│  │  │
+│  │  ├─ github.com/urfave/cli
+│  │  │
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/vishvananda/netlink
+│  │  └─ github.com/vishvananda/netns
+│  │
+│  └─ github.com/vishvananda/netns
+│
+├─ github.com/gogo/protobuf
+│
+├─ github.com/opencontainers/go-digest
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+├─ golang.org/x/net
+│
+└─ golang.org/x/time
+github.com/docker/docker/daemon/cluster/provider
+github.com/docker/docker/daemon/config
+├─ github.com/docker/go-units
+│
+├─ github.com/imdario/mergo
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ github.com/spf13/pflag
+github.com/docker/docker/daemon/discovery
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/daemon/events
+└─ github.com/docker/distribution
+   └─ github.com/opencontainers/go-digest
+github.com/docker/docker/daemon/events/testutils
+github.com/docker/docker/daemon/exec
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/daemon/graphdriver
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/daemon/graphdriver/aufs
+├─ github.com/opencontainers/runc
+│  ├─ github.com/coreos/go-systemd
+│  │
+│  ├─ github.com/docker/go-units
+│  │
+│  ├─ github.com/opencontainers/runtime-spec
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/urfave/cli
+│  │
+│  └─ golang.org/x/sys
+│
+├─ github.com/opencontainers/selinux
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/daemon/graphdriver/btrfs
+├─ github.com/docker/go-units
+│
+├─ github.com/opencontainers/selinux
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/daemon/graphdriver/copy
+├─ github.com/opencontainers/runc
+│  ├─ github.com/coreos/go-systemd
+│  │
+│  ├─ github.com/docker/go-units
+│  │
+│  ├─ github.com/opencontainers/runtime-spec
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/urfave/cli
+│  │
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/daemon/graphdriver/devmapper
+├─ github.com/docker/go-units
+│
+├─ github.com/opencontainers/selinux
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/daemon/graphdriver/graphtest
+├─ github.com/docker/go-units
+├─ github.com/stretchr/testify
+└─ golang.org/x/sys
+github.com/docker/docker/daemon/graphdriver/overlay
+├─ github.com/opencontainers/selinux
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/daemon/graphdriver/overlay2
+├─ github.com/docker/go-units
+│
+├─ github.com/opencontainers/runc
+│  ├─ github.com/coreos/go-systemd
+│  │
+│  ├─ github.com/docker/go-units
+│  │
+│  ├─ github.com/opencontainers/runtime-spec
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/urfave/cli
+│  │
+│  └─ golang.org/x/sys
+│
+├─ github.com/opencontainers/selinux
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/daemon/graphdriver/overlayutils
+github.com/docker/docker/daemon/graphdriver/quota
+├─ github.com/opencontainers/runc
+│  ├─ github.com/coreos/go-systemd
+│  │
+│  ├─ github.com/docker/go-units
+│  │
+│  ├─ github.com/opencontainers/runtime-spec
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/urfave/cli
+│  │
+│  └─ golang.org/x/sys
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/daemon/graphdriver/register
+github.com/docker/docker/daemon/graphdriver/vfs
+├─ github.com/docker/go-units
+└─ github.com/opencontainers/selinux
+github.com/docker/docker/daemon/graphdriver/zfs
+├─ github.com/mistifyio/go-zfs
+│
+├─ github.com/opencontainers/selinux
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/daemon/initlayer
+└─ golang.org/x/sys
+github.com/docker/docker/daemon/links
+└─ github.com/docker/go-connections
+github.com/docker/docker/daemon/listeners
+├─ github.com/coreos/go-systemd
+│
+├─ github.com/docker/go-connections
+│
+├─ github.com/opencontainers/runc
+│  ├─ github.com/coreos/go-systemd
+│  │
+│  ├─ github.com/docker/go-units
+│  │
+│  ├─ github.com/opencontainers/runtime-spec
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/urfave/cli
+│  │
+│  └─ golang.org/x/sys
+│
+├─ github.com/pkg/errors
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/daemon/logger
+├─ github.com/docker/go-units
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/daemon/logger/awslogs
+├─ github.com/aws/aws-sdk-go
+│
+├─ github.com/pkg/errors
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/daemon/logger/fluentd
+├─ github.com/docker/go-units
+│
+├─ github.com/pkg/errors
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/daemon/logger/gcplogs
+├─ cloud.google.com/go
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+├─ golang.org/x/net
+│
+└─ google.golang.org/genproto
+github.com/docker/docker/daemon/logger/gelf
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/daemon/logger/journald
+├─ github.com/coreos/go-systemd
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/daemon/logger/jsonfilelog
+├─ github.com/docker/go-units
+│
+├─ github.com/pkg/errors
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/daemon/logger/jsonfilelog/jsonlog
+└─ github.com/pkg/errors
+github.com/docker/docker/daemon/logger/logentries
+├─ github.com/pkg/errors
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/daemon/logger/loggerutils
+├─ github.com/fsnotify/fsnotify
+│  └─ golang.org/x/sys
+│
+├─ github.com/pkg/errors
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/daemon/logger/loggerutils/multireader
+github.com/docker/docker/daemon/logger/splunk
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/daemon/logger/syslog
+├─ github.com/docker/go-connections
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/daemon/logger/templates
+github.com/docker/docker/daemon/names
+github.com/docker/docker/daemon/network
+├─ github.com/docker/go-connections
+└─ github.com/pkg/errors
+github.com/docker/docker/daemon/stats
+├─ github.com/opencontainers/runc
+│  ├─ github.com/coreos/go-systemd
+│  │
+│  ├─ github.com/docker/go-units
+│  │
+│  ├─ github.com/opencontainers/runtime-spec
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/urfave/cli
+│  │
+│  └─ golang.org/x/sys
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/distribution
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/docker/go-connections
+│
+├─ github.com/docker/libtrust
+│
+├─ github.com/opencontainers/go-digest
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/net
+github.com/docker/docker/distribution/metadata
+├─ github.com/opencontainers/go-digest
+└─ github.com/pkg/errors
+github.com/docker/docker/distribution/utils
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/distribution/xfer
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/net
+github.com/docker/docker/dockerversion
+└─ golang.org/x/net
+github.com/docker/docker/hack/integration-cli-on-swarm/agent/master
+github.com/docker/docker/hack/integration-cli-on-swarm/agent/types
+github.com/docker/docker/hack/integration-cli-on-swarm/agent/worker
+└─ github.com/docker/distribution
+   └─ github.com/opencontainers/go-digest
+github.com/docker/docker/hack/integration-cli-on-swarm/host
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/image
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/opencontainers/go-digest
+│
+├─ github.com/pkg/errors
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/image/cache
+└─ github.com/pkg/errors
+github.com/docker/docker/image/tarexport
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/opencontainers/go-digest
+│
+├─ github.com/pkg/errors
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/image/v1
+├─ github.com/opencontainers/go-digest
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/integration
+github.com/docker/docker/integration/build
+github.com/docker/docker/integration/container
+github.com/docker/docker/integration/image
+github.com/docker/docker/integration/network
+github.com/docker/docker/integration/plugin
+github.com/docker/docker/integration/plugin/authz
+github.com/docker/docker/integration/service
+github.com/docker/docker/integration/system
+github.com/docker/docker/integration/util/request
+├─ github.com/docker/go-connections
+└─ github.com/stretchr/testify
+github.com/docker/docker/integration/util/requirement
+github.com/docker/docker/integration-cli
+github.com/docker/docker/integration-cli/checker
+github.com/docker/docker/integration-cli/cli
+└─ github.com/pkg/errors
+github.com/docker/docker/integration-cli/cli/build
+github.com/docker/docker/integration-cli/cli/build/fakecontext
+github.com/docker/docker/integration-cli/cli/build/fakegit
+└─ github.com/stretchr/testify
+github.com/docker/docker/integration-cli/cli/build/fakestorage
+└─ github.com/stretchr/testify
+github.com/docker/docker/integration-cli/daemon
+├─ github.com/docker/go-connections
+├─ github.com/pkg/errors
+├─ github.com/stretchr/testify
+├─ golang.org/x/net
+└─ golang.org/x/sys
+github.com/docker/docker/integration-cli/environment
+github.com/docker/docker/integration-cli/fixtures/load
+└─ github.com/pkg/errors
+github.com/docker/docker/integration-cli/fixtures/plugin
+├─ github.com/pkg/errors
+└─ golang.org/x/net
+github.com/docker/docker/integration-cli/fixtures/plugin/basic
+github.com/docker/docker/integration-cli/registry
+└─ github.com/opencontainers/go-digest
+github.com/docker/docker/integration-cli/request
+├─ github.com/docker/go-connections
+└─ github.com/pkg/errors
+github.com/docker/docker/integration-cli/requirement
+github.com/docker/docker/internal/test/environment
+├─ github.com/pkg/errors
+├─ github.com/stretchr/testify
+└─ golang.org/x/net
+github.com/docker/docker/internal/testutil
+└─ github.com/stretchr/testify
+github.com/docker/docker/layer
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/opencontainers/go-digest
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/libcontainerd
+├─ github.com/BurntSushi/toml
+│
+├─ github.com/opencontainers/image-spec
+│
+├─ github.com/opencontainers/runtime-spec
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+├─ golang.org/x/sys
+│
+└─ google.golang.org/grpc
+   ├─ github.com/golang/protobuf
+   └─ golang.org/x/net
+github.com/docker/docker/migrate/v1
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/opencontainers/go-digest
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/oci
+├─ github.com/opencontainers/runc
+│  ├─ github.com/coreos/go-systemd
+│  │
+│  ├─ github.com/docker/go-units
+│  │
+│  ├─ github.com/opencontainers/runtime-spec
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/urfave/cli
+│  │
+│  └─ golang.org/x/sys
+│
+└─ github.com/opencontainers/runtime-spec
+github.com/docker/docker/opts
+├─ github.com/docker/go-units
+└─ github.com/pkg/errors
+github.com/docker/docker/pkg/aaparser
+github.com/docker/docker/pkg/archive
+├─ github.com/opencontainers/runc
+│  ├─ github.com/coreos/go-systemd
+│  │
+│  ├─ github.com/docker/go-units
+│  │
+│  ├─ github.com/opencontainers/runtime-spec
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/urfave/cli
+│  │
+│  └─ golang.org/x/sys
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/pkg/authorization
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/net
+github.com/docker/docker/pkg/broadcaster
+github.com/docker/docker/pkg/chrootarchive
+├─ github.com/opencontainers/runc
+│  ├─ github.com/coreos/go-systemd
+│  │
+│  ├─ github.com/docker/go-units
+│  │
+│  ├─ github.com/opencontainers/runtime-spec
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/urfave/cli
+│  │
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/pkg/containerfs
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/pkg/devicemapper
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/pkg/directory
+github.com/docker/docker/pkg/discovery
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/pkg/discovery/file
+github.com/docker/docker/pkg/discovery/kv
+├─ github.com/docker/go-connections
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/pkg/discovery/memory
+github.com/docker/docker/pkg/discovery/nodes
+github.com/docker/docker/pkg/dmesg
+└─ golang.org/x/sys
+github.com/docker/docker/pkg/filenotify
+├─ github.com/fsnotify/fsnotify
+│  └─ golang.org/x/sys
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/pkg/fileutils
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/pkg/fsutils
+└─ golang.org/x/sys
+github.com/docker/docker/pkg/homedir
+└─ github.com/opencontainers/runc
+   ├─ github.com/coreos/go-systemd
+   │
+   ├─ github.com/docker/go-units
+   │
+   ├─ github.com/opencontainers/runtime-spec
+   │
+   ├─ github.com/sirupsen/logrus
+   │  ├─ golang.org/x/crypto
+   │  └─ golang.org/x/sys
+   │
+   ├─ github.com/urfave/cli
+   │
+   └─ golang.org/x/sys
+github.com/docker/docker/pkg/idtools
+└─ github.com/opencontainers/runc
+   ├─ github.com/coreos/go-systemd
+   │
+   ├─ github.com/docker/go-units
+   │
+   ├─ github.com/opencontainers/runtime-spec
+   │
+   ├─ github.com/sirupsen/logrus
+   │  ├─ golang.org/x/crypto
+   │  └─ golang.org/x/sys
+   │
+   ├─ github.com/urfave/cli
+   │
+   └─ golang.org/x/sys
+github.com/docker/docker/pkg/ioutils
+└─ golang.org/x/net
+github.com/docker/docker/pkg/jsonmessage
+├─ github.com/Nvveen/Gotty
+└─ github.com/docker/go-units
+github.com/docker/docker/pkg/locker
+github.com/docker/docker/pkg/longpath
+github.com/docker/docker/pkg/loopback
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/pkg/mount
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/pkg/namesgenerator
+github.com/docker/docker/pkg/namesgenerator/cmd/names-generator
+github.com/docker/docker/pkg/parsers
+github.com/docker/docker/pkg/parsers/kernel
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/pkg/parsers/operatingsystem
+└─ github.com/mattn/go-shellwords
+github.com/docker/docker/pkg/pidfile
+github.com/docker/docker/pkg/platform
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/pkg/plugingetter
+github.com/docker/docker/pkg/plugins
+├─ github.com/docker/go-connections
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/pkg/plugins/pluginrpc-gen
+github.com/docker/docker/pkg/plugins/pluginrpc-gen/fixtures
+github.com/docker/docker/pkg/plugins/pluginrpc-gen/fixtures/otherfixture
+github.com/docker/docker/pkg/plugins/transport
+github.com/docker/docker/pkg/pools
+github.com/docker/docker/pkg/progress
+└─ golang.org/x/time
+github.com/docker/docker/pkg/pubsub
+github.com/docker/docker/pkg/reexec
+└─ golang.org/x/sys
+github.com/docker/docker/pkg/signal
+├─ github.com/pkg/errors
+└─ golang.org/x/sys
+github.com/docker/docker/pkg/signal/testfiles
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/pkg/stdcopy
+github.com/docker/docker/pkg/streamformatter
+github.com/docker/docker/pkg/stringid
+github.com/docker/docker/pkg/symlink
+github.com/docker/docker/pkg/sysinfo
+├─ github.com/opencontainers/runc
+│  ├─ github.com/coreos/go-systemd
+│  │
+│  ├─ github.com/docker/go-units
+│  │
+│  ├─ github.com/opencontainers/runtime-spec
+│  │
+│  ├─ github.com/sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/urfave/cli
+│  │
+│  └─ golang.org/x/sys
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/sys
+github.com/docker/docker/pkg/system
+├─ github.com/docker/go-units
+├─ github.com/opencontainers/image-spec
+├─ github.com/pkg/errors
+└─ golang.org/x/sys
+github.com/docker/docker/pkg/tailfile
+github.com/docker/docker/pkg/tarsum
+github.com/docker/docker/pkg/term
+└─ golang.org/x/sys
+github.com/docker/docker/pkg/term/windows
+├─ github.com/Azure/go-ansiterm
+│  └─ github.com/sirupsen/logrus
+│     ├─ golang.org/x/crypto
+│     └─ golang.org/x/sys
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/pkg/truncindex
+github.com/docker/docker/pkg/urlutil
+github.com/docker/docker/pkg/useragent
+github.com/docker/docker/plugin
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/opencontainers/go-digest
+│
+├─ github.com/opencontainers/runtime-spec
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+├─ golang.org/x/net
+│
+└─ golang.org/x/sys
+github.com/docker/docker/plugin/executor/containerd
+├─ github.com/opencontainers/runtime-spec
+│
+├─ github.com/pkg/errors
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/plugin/v2
+├─ github.com/opencontainers/go-digest
+├─ github.com/opencontainers/runtime-spec
+└─ github.com/pkg/errors
+github.com/docker/docker/profiles/apparmor
+github.com/docker/docker/profiles/seccomp
+├─ github.com/opencontainers/runtime-spec
+└─ github.com/seccomp/libseccomp-golang
+github.com/docker/docker/reference
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/opencontainers/go-digest
+│
+└─ github.com/pkg/errors
+github.com/docker/docker/registry
+├─ github.com/docker/distribution
+│  └─ github.com/opencontainers/go-digest
+│
+├─ github.com/docker/go-connections
+│
+├─ github.com/pkg/errors
+│
+├─ github.com/sirupsen/logrus
+│  ├─ golang.org/x/crypto
+│  └─ golang.org/x/sys
+│
+└─ golang.org/x/net
+github.com/docker/docker/registry/resumable
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/restartmanager
+github.com/docker/docker/runconfig
+github.com/docker/docker/runconfig/opts
+github.com/docker/docker/volume
+├─ github.com/opencontainers/selinux
+└─ github.com/pkg/errors
+github.com/docker/docker/volume/drivers
+├─ github.com/pkg/errors
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/volume/local
+├─ github.com/pkg/errors
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/volume/store
+├─ github.com/boltdb/bolt
+│
+├─ github.com/pkg/errors
+│
+└─ github.com/sirupsen/logrus
+   ├─ golang.org/x/crypto
+   └─ golang.org/x/sys
+github.com/docker/docker/volume/testutils

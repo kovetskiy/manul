@@ -1,0 +1,161 @@
+github.com/containous/traefik
+├─ github.com/containous/traefik/acme
+│  └─ github.com/cenk/backoff
+│
+├─ github.com/containous/traefik/auth
+│
+├─ github.com/containous/traefik/cluster
+│  ├─ github.com/cenk/backoff
+│  └─ github.com/satori/go.uuid
+│
+├─ github.com/containous/traefik/cmd/traefik
+│  ├─ github.com/Sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/containous/flaeg
+│  │  └─ github.com/ogier/pflag
+│  │
+│  ├─ github.com/coreos/go-systemd
+│  │
+│  ├─ github.com/mvdan/xurls
+│  │
+│  └─ github.com/satori/go.uuid
+│
+├─ github.com/containous/traefik/configuration
+│  └─ github.com/containous/flaeg
+│     └─ github.com/ogier/pflag
+│
+├─ github.com/containous/traefik/examples/accessLog
+│
+├─ github.com/containous/traefik/healthcheck
+│  └─ github.com/vulcand/oxy
+│
+├─ github.com/containous/traefik/integration
+│
+├─ github.com/containous/traefik/integration/helloworld
+│  ├─ github.com/golang/protobuf
+│  │
+│  ├─ golang.org/x/net
+│  │
+│  └─ google.golang.org/grpc
+│     ├─ github.com/golang/protobuf
+│     └─ golang.org/x/net
+│
+├─ github.com/containous/traefik/integration/try
+│
+├─ github.com/containous/traefik/job
+│  └─ github.com/cenk/backoff
+│
+├─ github.com/containous/traefik/log
+│  └─ github.com/Sirupsen/logrus
+│     ├─ golang.org/x/crypto
+│     └─ golang.org/x/sys
+│
+├─ github.com/containous/traefik/metrics
+│  ├─ github.com/go-kit/kit
+│  └─ github.com/prometheus/client_golang
+│
+├─ github.com/containous/traefik/middlewares
+│  ├─ github.com/NYTimes/gziphandler
+│  │
+│  ├─ github.com/abbot/go-http-auth
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/net
+│  │
+│  ├─ github.com/go-kit/kit
+│  │
+│  ├─ github.com/pkg/errors
+│  │
+│  └─ github.com/vulcand/oxy
+│
+├─ github.com/containous/traefik/middlewares/accesslog
+│  ├─ github.com/Sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  └─ github.com/vulcand/oxy
+│
+├─ github.com/containous/traefik/provider
+│  └─ github.com/BurntSushi/toml
+│
+├─ github.com/containous/traefik/provider/boltdb
+│
+├─ github.com/containous/traefik/provider/consul
+│  └─ github.com/cenk/backoff
+│
+├─ github.com/containous/traefik/provider/docker
+│  ├─ github.com/cenk/backoff
+│  ├─ github.com/docker/docker
+│  └─ github.com/docker/go-connections
+│
+├─ github.com/containous/traefik/provider/dynamodb
+│  ├─ github.com/aws/aws-sdk-go
+│  └─ github.com/cenk/backoff
+│
+├─ github.com/containous/traefik/provider/ecs
+│  ├─ github.com/aws/aws-sdk-go
+│  └─ github.com/cenk/backoff
+│
+├─ github.com/containous/traefik/provider/etcd
+│
+├─ github.com/containous/traefik/provider/eureka
+│  └─ github.com/cenk/backoff
+│
+├─ github.com/containous/traefik/provider/file
+│  ├─ github.com/BurntSushi/toml
+│  │
+│  └─ gopkg.in/fsnotify.v1
+│     └─ golang.org/x/sys
+│
+├─ github.com/containous/traefik/provider/kubernetes
+│  ├─ github.com/cenk/backoff
+│  └─ k8s.io/client-go
+│
+├─ github.com/containous/traefik/provider/kv
+│  └─ github.com/cenk/backoff
+│
+├─ github.com/containous/traefik/provider/marathon
+│  ├─ github.com/Sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/cenk/backoff
+│  │
+│  └─ github.com/containous/flaeg
+│     └─ github.com/ogier/pflag
+│
+├─ github.com/containous/traefik/provider/marathon/mocks
+│  └─ github.com/stretchr/testify
+│
+├─ github.com/containous/traefik/provider/mesos
+│  └─ github.com/cenk/backoff
+│
+├─ github.com/containous/traefik/provider/rancher
+│  ├─ github.com/Sirupsen/logrus
+│  │  ├─ golang.org/x/crypto
+│  │  └─ golang.org/x/sys
+│  │
+│  ├─ github.com/cenk/backoff
+│  │
+│  └─ github.com/rancher/go-rancher
+│
+├─ github.com/containous/traefik/provider/web
+│  ├─ github.com/elazarl/go-bindata-assetfs
+│  └─ github.com/prometheus/client_golang
+│
+├─ github.com/containous/traefik/provider/zk
+│
+├─ github.com/containous/traefik/safe
+│  └─ github.com/cenk/backoff
+│
+├─ github.com/containous/traefik/server
+│  ├─ github.com/vulcand/oxy
+│  └─ golang.org/x/net
+│
+├─ github.com/containous/traefik/testhelpers
+│
+├─ github.com/containous/traefik/types
+│
+└─ github.com/containous/traefik/version
+   └─ github.com/google/go-github

@@ -1,0 +1,31 @@
+github.com/reconquest/orgalorg
+├─ github.com/docopt/docopt-go
+│
+├─ github.com/kovetskiy/lorg
+│  └─ github.com/zazab/zhash
+│
+├─ github.com/mattn/go-shellwords
+│
+├─ github.com/reconquest/barely
+│
+├─ github.com/reconquest/colorgful
+│  ├─ github.com/kovetskiy/lorg
+│  │  └─ github.com/zazab/zhash
+│  │
+│  └─ github.com/reconquest/loreley
+│     └─ golang.org/x/crypto
+│
+├─ github.com/reconquest/hierr-go
+│
+├─ github.com/reconquest/lineflushwriter-go
+│
+├─ github.com/reconquest/loreley
+│  └─ golang.org/x/crypto
+│
+├─ github.com/theairkit/runcmd
+│  ├─ github.com/reconquest/ser-go
+│  │  └─ github.com/reconquest/hierr-go
+│  │
+│  └─ golang.org/x/crypto
+│
+└─ golang.org/x/crypto

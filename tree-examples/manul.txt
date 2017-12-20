@@ -1,0 +1,31 @@
+github.com/kovetskiy/manul
+├─ github.com/PuerkitoBio/goquery
+│  ├─ github.com/andybalholm/cascadia
+│  │  └─ golang.org/x/net
+│  │
+│  └─ golang.org/x/net
+│
+├─ github.com/kovetskiy/godocs
+│
+├─ github.com/kovetskiy/lorg
+│  └─ github.com/zazab/zhash
+│
+├─ github.com/reconquest/hierr-go
+│
+├─ github.com/reconquest/karma-go
+│
+└─ github.com/reconquest/lexec-go
+   ├─ github.com/reconquest/callbackwriter-go
+   │
+   ├─ github.com/reconquest/executil-go
+   │  ├─ github.com/reconquest/ser-go
+   │  │  └─ github.com/reconquest/hierr-go
+   │  │
+   │  └─ golang.org/x/crypto
+   │
+   ├─ github.com/reconquest/lineflushwriter-go
+   │
+   ├─ github.com/reconquest/nopio-go
+   │
+   └─ github.com/reconquest/ser-go
+      └─ github.com/reconquest/hierr-go
