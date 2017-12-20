@@ -7,12 +7,12 @@ import (
 
 func handleUpdate(
 	recursive bool,
-	includeTestDeps bool,
+	withTests bool,
 	dependencies []string,
 ) error {
 	var err error
 	if len(dependencies) == 0 {
-		dependencies, err = parseImports(recursive, includeTestDeps)
+		dependencies, err = parseImports(recursive, withTests)
 		if err != nil {
 			return err
 		}

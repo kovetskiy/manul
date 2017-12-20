@@ -144,10 +144,10 @@ func filterPackages(packages []string) []string {
 	return imports
 }
 
-func ensureDependenciesExist(packages []string, includeTestDeps bool) error {
+func ensureDependenciesExist(packages []string, withTests bool) error {
 	args := []string{"get", "-d"} // -d for download only
 
-	if includeTestDeps {
+	if withTests {
 		args = append(args, "-t")
 	}
 

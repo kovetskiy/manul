@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-func handleQuery(recursive, includeTestDeps, onlyVendored bool) error {
+func handleQuery(recursive, withTests, onlyVendored bool) error {
 	submodules, err := getVendorSubmodules()
 	if err != nil {
 		return err
@@ -19,7 +19,7 @@ func handleQuery(recursive, includeTestDeps, onlyVendored bool) error {
 			fmt.Printf(format, submodule, commit)
 		}
 	} else {
-		imports, err := parseImports(recursive, includeTestDeps)
+		imports, err := parseImports(recursive, withTests)
 		if err != nil {
 			return err
 		}

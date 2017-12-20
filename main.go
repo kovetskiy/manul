@@ -91,41 +91,32 @@ func main() {
 	args := godocs.MustParse(usage, version)
 
 	var (
-		modeInstall = args["--install"].(bool)
-		modeUpdate  = args["--update"].(bool)
-		modeRemove  = args["--remove"].(bool)
-		modeQuery   = args["--query"].(bool)
-		modeClean   = args["--clean"].(bool)
-
 		dependencies, _ = args["<dependency>"].([]string)
-
 		recursive       = args["--recursive"].(bool)
-		includeTestDeps = args["--testing"].(bool)
-
-		verbose = args["--verbose"].(bool)
+		withTests       = args["--testing"].(bool)
 	)
 
-	if verbose {
+	if args["--verbose"].(bool) {
 		logger.SetLevel(lorg.LevelDebug)
 	}
 
 	var err error
 	switch {
-	case modeInstall:
-		err = handleInstall(recursive, includeTestDeps, dependencies)
+	case args["--install"].(bool):
+		err = handleInstall(recursive, withTests, dependencies)
 
-	case modeUpdate:
-		err = handleUpdate(recursive, includeTestDeps, dependencies)
+	case args["--update"].(bool):
+		err = handleUpdate(recursive, withTests, dependencies)
 
-	case modeQuery:
+	case args["--query"].(bool):
 		onlyVendored := args["-o"].(bool)
-		err = handleQuery(recursive, includeTestDeps, onlyVendored)
+		err = handleQuery(recursive, withTests, onlyVendored)
 
-	case modeRemove:
+	case args["--remove"].(bool):
 		err = handleRemove(dependencies)
 
-	case modeClean:
-		err = handleClean(recursive, includeTestDeps)
+	case args["--clean"].(bool):
+		err = handleClean(recursive, withTests)
 	}
 
 	if err != nil {

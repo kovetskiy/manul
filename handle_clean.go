@@ -2,8 +2,8 @@ package main
 
 import "github.com/reconquest/karma-go"
 
-func handleClean(recursive, includeTestDeps bool) error {
-	imports, err := parseImports(recursive, includeTestDeps)
+func handleClean(recursive, withTests bool) error {
+	imports, err := parseImports(recursive, withTests)
 	if err != nil {
 		return err
 	}

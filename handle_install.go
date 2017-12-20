@@ -7,9 +7,9 @@ import (
 	"github.com/reconquest/ser-go"
 )
 
-func handleInstall(recursive bool, includeTestDeps bool,
+func handleInstall(recursive bool, withTests bool,
 	dependencies []string) error {
-	imports, err := parseImports(recursive, includeTestDeps)
+	imports, err := parseImports(recursive, withTests)
 	if err != nil {
 		return err
 	}
