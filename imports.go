@@ -208,11 +208,20 @@ func listPackages() ([]string, error) {
 }
 
 func isOwnPackage(path string) bool {
+	// workdir is without trailing slash, to make sure we don't exclude
+	// packages that have the same folder prefix, suffix with dir separator
+	wdir := workdir + string(os.PathSeparator)
+
 	for _, gopath := range filepath.SplitList(os.Getenv("GOPATH")) {
-		if strings.HasPrefix(filepath.Join(gopath, "src", path), workdir) {
+		p := filepath.Join(gopath, "src", path)
+
+		// this is an own package if the path without separator is equal to path
+		// or when path has the same prefix with separator
+		if p == workdir || strings.HasPrefix(p, wdir) {
 			return true
 		}
 	}
+
 	return false
 }
 
