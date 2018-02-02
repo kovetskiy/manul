@@ -13,9 +13,10 @@ import (
 )
 
 type golistOutput struct {
-	Imports     []string
-	Deps        []string
-	TestImports []string
+	Imports      []string
+	Deps         []string
+	TestImports  []string
+	XTestImports []string
 }
 
 func parseImports(recursive bool, testDependencies bool) ([]string, error) {
@@ -69,6 +70,7 @@ func calculateDependencies(
 
 		if testDependencies {
 			testImports = append(testImports, data.TestImports...)
+			testImports = append(testImports, data.XTestImports...)
 		}
 	}
 
