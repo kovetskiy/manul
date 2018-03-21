@@ -30,9 +30,11 @@ func parseImports(recursive bool, testDependencies bool) ([]string, error) {
 
 	// Ensuring our dependencies exists isn't a strict requirement, therefore
 	// only print a message to stderr rather then completely failing.
-	err = ensureDependenciesExist(packages, testDependencies)
-	if err != nil {
-		logger.Error(err)
+	for _, pkg := range packages {
+		err = ensureDependenciesExist(pkg, testDependencies)
+		if err != nil {
+			logger.Warning(err)
+		}
 	}
 
 	imports, err = calculateDependencies(packages, recursive, testDependencies)
@@ -153,21 +155,21 @@ func filterPackages(packages []string, mode build.ImportMode) []string {
 	return imports
 }
 
-func ensureDependenciesExist(packages []string, withTests bool) error {
+func ensureDependenciesExist(pkg string, withTests bool) error {
 	args := []string{"get", "-d"} // -d for download only
 
 	if withTests {
 		args = append(args, "-t")
 	}
 
-	args = append(args, packages...)
+	args = append(args, pkg)
 
 	_, err := execute(exec.Command("go", args...))
 	if err != nil {
 		return karma.Format(
 			err,
-			"unable to go get dependencies: %s",
-			strings.Join(packages, ", "),
+			"unable to go get dependencies for %s",
+			pkg,
 		)
 	}
 
