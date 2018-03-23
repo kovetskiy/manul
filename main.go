@@ -44,6 +44,7 @@ Options:
         -o          List only already-vendored dependencies.
     -C --clean      Detect all unused vendored dependencies and remove it.
     -T --tree       Show dependencies tree.
+	  -i --import   Show used import path instead of git repo.
     -t --testing    Include dependencies from tests.
     -r --recursive  Be recursive.
     -h --help       Show help message.
@@ -112,7 +113,7 @@ func main() {
 	var err error
 	switch {
 	case args["--tree"].(bool):
-		err = handleTree(withTests)
+		err = handleTree(withTests, args["--import"].(bool))
 
 	case args["--install"].(bool):
 		err = handleInstall(recursive, withTests, dependencies)

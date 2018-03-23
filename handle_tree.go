@@ -12,7 +12,7 @@ type Tree struct {
 	Nested  []*Tree
 }
 
-func handleTree(withTests bool) error {
+func handleTree(withTests bool, usePath bool) error {
 	packages, err := listPackages()
 	if err != nil {
 		return karma.Format(
@@ -40,7 +40,7 @@ func handleTree(withTests bool) error {
 
 	cache := map[string]*Tree{}
 	for i, pkg := range packages {
-		pkgTree := getTree(pkg, withTests, cache)
+		pkgTree := getTree(pkg, withTests, cache, usePath)
 
 		if !inRoot {
 			fmt.Println(formatTree(pkgTree))
@@ -84,7 +84,12 @@ func formatTree(tree *Tree) karma.Reason {
 	return branches
 }
 
-func getTree(pkg string, withTests bool, cache map[string]*Tree) *Tree {
+func getTree(
+	pkg string,
+	withTests bool,
+	cache map[string]*Tree,
+	usePath bool,
+) *Tree {
 	if cached, ok := cache[pkg]; ok {
 		return cached
 	}
@@ -102,7 +107,14 @@ func getTree(pkg string, withTests bool, cache map[string]*Tree) *Tree {
 	}
 
 	var imports []string
-	for _, importing := range list.Imports {
+	var listing []string
+	if usePath {
+		listing = list.Deps
+	} else {
+		listing = list.Imports
+	}
+
+	for _, importing := range listing {
 		imports = append(imports, removeVendorPrefix(importing))
 	}
 
@@ -115,7 +127,10 @@ func getTree(pkg string, withTests bool, cache map[string]*Tree) *Tree {
 			continue
 		}
 
-		tree.Nested = append(tree.Nested, getTree(imported, withTests, cache))
+		tree.Nested = append(
+			tree.Nested,
+			getTree(imported, withTests, cache, usePath),
+		)
 	}
 
 	if withTests {
@@ -123,7 +138,7 @@ func getTree(pkg string, withTests bool, cache map[string]*Tree) *Tree {
 		for _, imported := range testImports {
 			tree.Nested = append(
 				tree.Nested,
-				getTree(imported, withTests, cache),
+				getTree(imported, withTests, cache, usePath),
 			)
 		}
 	}
