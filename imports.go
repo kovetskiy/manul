@@ -57,7 +57,7 @@ func calculateDependencies(
 	data, err := golist(packages...)
 	if err != nil {
 		return nil, karma.Format(
-			err, "unable to list dependecies for some packages in: %v", packages,
+			err, "unable to list dependencies for some packages in: %v", packages,
 		)
 	}
 
@@ -80,7 +80,7 @@ func calculateDependencies(
 		testData, err := golist(testImports...)
 		if err != nil {
 			return nil, karma.Format(
-				err, "unable to list dependecies for some test packages in: %v", testImports)
+				err, "unable to list dependencies for some test packages in: %v", testImports)
 		}
 
 		for _, pkgMetaData := range testData {
