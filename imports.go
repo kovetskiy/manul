@@ -33,13 +33,11 @@ func parseImports(recursive bool, testDependencies bool) ([]string, error) {
 	// only print a message to stderr rather then completely failing.
 
 	err = ensureDependenciesExist(packages, true)
-
 	if err != nil {
 		logger.Warning(err)
 	}
 
 	imports, err = calculateDependencies(packages, recursive, testDependencies)
-
 	if err != nil {
 		return imports, err
 	}
@@ -57,7 +55,6 @@ func calculateDependencies(
 	var deps, testImports, testDeps []string
 
 	data, err := golist(packages...)
-
 	if err != nil {
 		return nil, karma.Format(
 			err, "unable to list dependecies for some packages in: %v", packages,
@@ -81,7 +78,6 @@ func calculateDependencies(
 
 	if recursive {
 		testData, err := golist(testImports...)
-
 		if err != nil {
 			return nil, karma.Format(
 				err, "unable to list dependecies for some test packages in: %v", testImports)
@@ -157,7 +153,6 @@ func filterPackages(packages []string, mode build.ImportMode) []string {
 }
 
 func ensureDependenciesExist(packages []string, withTests bool) error {
-
 	if packages == nil {
 		return errors.New("packages list cannot be empty")
 	}
@@ -173,7 +168,6 @@ func ensureDependenciesExist(packages []string, withTests bool) error {
 	}
 
 	_, err := execute(exec.Command("go", args...))
-
 	if err != nil {
 		return karma.Format(
 			err,
@@ -199,7 +193,6 @@ func golist(packages ...string) ([]golistOutput, error) {
 	}
 
 	jsonStream, err := execute(exec.Command("go", args...))
-
 	if err != nil {
 		return result, err
 	}
@@ -208,8 +201,8 @@ func golist(packages ...string) ([]golistOutput, error) {
 
 	for {
 		pkgMetaData := golistOutput{}
-		err := decoder.Decode(&pkgMetaData)
 
+		err := decoder.Decode(&pkgMetaData)
 		if err != nil {
 			return result, karma.Format(err, "failed to decode go list output")
 		}

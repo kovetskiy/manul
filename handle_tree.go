@@ -102,7 +102,7 @@ func getTree(
 	}
 
 	list, err := golist(pkg)
-	if err != nil || len(list) != 1 {
+	if err != nil {
 		logger.Fatal(err)
 	}
 
