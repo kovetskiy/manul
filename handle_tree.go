@@ -107,14 +107,14 @@ func getTree(
 	}
 
 	var imports []string
-	var listing []string
+	var importList []string
 	if usePath {
-		listing = list.Deps
+		importList = list[0].Deps
 	} else {
-		listing = list.Imports
+		importList = list[0].Imports
 	}
 
-	for _, importing := range listing {
+	for _, importing := range importList {
 		imports = append(imports, removeVendorPrefix(importing))
 	}
 
@@ -134,7 +134,7 @@ func getTree(
 	}
 
 	if withTests {
-		testImports := filterPackages(list.TestImports, 0)
+		testImports := filterPackages(list[0].TestImports, 0)
 		for _, imported := range testImports {
 			tree.Nested = append(
 				tree.Nested,

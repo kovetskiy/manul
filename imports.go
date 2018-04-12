@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"go/build"
 	"os"
 	"os/exec"
@@ -30,11 +31,10 @@ func parseImports(recursive bool, testDependencies bool) ([]string, error) {
 
 	// Ensuring our dependencies exists isn't a strict requirement, therefore
 	// only print a message to stderr rather then completely failing.
-	for _, pkg := range packages {
-		err = ensureDependenciesExist(pkg, testDependencies)
-		if err != nil {
-			logger.Warning(err)
-		}
+
+	err = ensureDependenciesExist(packages, true)
+	if err != nil {
+		logger.Warning(err)
 	}
 
 	imports, err = calculateDependencies(packages, recursive, testDependencies)
@@ -43,9 +43,7 @@ func parseImports(recursive bool, testDependencies bool) ([]string, error) {
 	}
 
 	imports = filterPackages(imports, build.IgnoreVendor)
-
 	sort.Strings(imports)
-
 	return imports, nil
 }
 
@@ -54,40 +52,39 @@ func calculateDependencies(
 	recursive,
 	testDependencies bool,
 ) ([]string, error) {
-	var deps, imports, testImports, testDeps []string
+	var deps, testImports, testDeps []string
 
-	for _, pkg := range packages {
-		data, err := golist(pkg)
-		if err != nil {
-			return imports, karma.Format(
-				err, "unable to list dependecies for package: %s", pkg,
-			)
-		}
+	data, err := golist(packages...)
+	if err != nil {
+		return nil, karma.Format(
+			err, "unable to list dependencies for some packages in: %v", packages,
+		)
+	}
 
+	for _, pkgMetaData := range data {
 		if recursive {
-			deps = append(deps, data.Deps...)
+			deps = append(deps, pkgMetaData.Deps...)
 		} else {
-			deps = append(deps, data.Imports...)
+			deps = append(deps, pkgMetaData.Imports...)
 		}
 
 		if testDependencies {
-			testImports = append(testImports, data.TestImports...)
-			testImports = append(testImports, data.XTestImports...)
+			testImports = append(testImports, pkgMetaData.TestImports...)
+			testImports = append(testImports, pkgMetaData.XTestImports...)
 		}
 	}
 
 	testImports = unique(testImports)
-	if recursive {
-		for _, testImport := range testImports {
-			testData, err := golist(testImport)
-			if err != nil {
-				return imports, karma.Format(
-					err, "unable to list dependencies for package: %s",
-					testImport,
-				)
-			}
 
-			testDeps = append(testDeps, testData.Deps...)
+	if recursive {
+		testData, err := golist(testImports...)
+		if err != nil {
+			return nil, karma.Format(
+				err, "unable to list dependencies for some test packages in: %v", testImports)
+		}
+
+		for _, pkgMetaData := range testData {
+			testDeps = append(testDeps, pkgMetaData.Deps...)
 		}
 
 		deps = append(deps, testDeps...)
@@ -155,41 +152,69 @@ func filterPackages(packages []string, mode build.ImportMode) []string {
 	return imports
 }
 
-func ensureDependenciesExist(pkg string, withTests bool) error {
+func ensureDependenciesExist(packages []string, withTests bool) error {
+	if packages == nil {
+		return errors.New("packages list cannot be empty")
+	}
+
 	args := []string{"get", "-d"} // -d for download only
 
 	if withTests {
 		args = append(args, "-t")
 	}
 
-	args = append(args, pkg)
+	for _, pkg := range packages {
+		args = append(args, pkg)
+	}
 
 	_, err := execute(exec.Command("go", args...))
 	if err != nil {
 		return karma.Format(
 			err,
-			"unable to go get dependencies for %s",
-			pkg,
+			"unable to go get dependencies for one of the packages in %v",
+			packages,
 		)
 	}
 
 	return nil
 }
 
-func golist(pkg string) (golistOutput, error) {
-	data := golistOutput{}
+func golist(packages ...string) ([]golistOutput, error) {
+	result := []golistOutput{}
 
-	out, err := execute(exec.Command("go", "list", "-e", "-json", pkg))
-	if err != nil {
-		return data, err
+	if packages == nil {
+		return result, errors.New("packages list cannot be empty")
 	}
 
-	err = json.Unmarshal([]byte(out), &data)
-	if err != nil {
-		return data, karma.Format(err, "unable to decode `go list` JSON output")
+	args := []string{"list", "-e", "-json"}
+
+	for _, pkg := range packages {
+		args = append(args, pkg)
 	}
 
-	return data, nil
+	jsonStream, err := execute(exec.Command("go", args...))
+	if err != nil {
+		return result, err
+	}
+
+	decoder := json.NewDecoder(strings.NewReader(jsonStream))
+
+	for {
+		pkgMetaData := golistOutput{}
+
+		err := decoder.Decode(&pkgMetaData)
+		if err != nil {
+			return result, karma.Format(err, "failed to decode go list output")
+		}
+
+		result = append(result, pkgMetaData)
+
+		if !decoder.More() {
+			break
+		}
+	}
+
+	return result, nil
 }
 
 func listPackages() ([]string, error) {
